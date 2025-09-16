@@ -1,0 +1,2 @@
+C:/Users/Zeus/Desktop/now/Omar_Toselli/Omar_Toselli/android/app/.cxx/Debug/303r1e1s/x86/CMakeFiles/edit_cache.dir
+C:/Users/Zeus/Desktop/now/Omar_Toselli/Omar_Toselli/android/app/.cxx/Debug/303r1e1s/x86/CMakeFiles/rebuild_cache.dir
