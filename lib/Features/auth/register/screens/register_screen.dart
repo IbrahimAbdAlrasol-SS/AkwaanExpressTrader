@@ -371,6 +371,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             ],
           ),
         ),
+        bottomNavigationBar: _buildBottomButtons(),
       ),
     );
   }
@@ -540,6 +541,107 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
     );
   }
 
+  Widget _buildBottomButtons() {
+    return Container(
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 20,
+        bottom: MediaQuery.of(context).viewPadding.bottom + 20,
+        top: 20,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(color: Colors.grey.shade200),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: _currentIndex == 0
+          ? _buildFirstTabButtons()
+          : _buildSecondTabButtons(),
+    );
+  }
+
+  Widget _buildFirstTabButtons() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: SizedBox(
+            width: 150,
+            height: 50,
+            child: FilledButton(
+              onPressed: _goToNextTab,
+              child: const Text('التالي'),
+            ),
+          ),
+        ),
+        const Gap(16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "هل لديك حساب؟",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            const Gap(5),
+            GestureDetector(
+              onTap: () => context.go(AppRoutes.login),
+              child: Text(
+                "تسجيل الدخول",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSecondTabButtons() {
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: _isSubmitting
+                ? null
+                : () => _tabController.animateTo(0),
+            child: const Text('السابق'),
+          ),
+        ),
+        const Gap(16),
+        Expanded(
+          flex: 2,
+          child: FilledButton(
+            onPressed: _isSubmitting ? null : _submitRegistration,
+            child: _isSubmitting
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : const Text('إنشاء الحساب'),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildTabBarView() {
     return TabBarView(
       controller: _tabController,
@@ -550,19 +652,25 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
           position: _slideAnimation,
           child: FadeTransition(
             opacity: _fadeAnimation,
-            child: SingleChildScrollView(
-              child: UserInfoTab(
-                onNext: _goToNextTab,
-                onUserInfoChanged: _updateUserInfo,
-                initialData: {
-                  'fullName': fullName,
-                  'brandName': brandName,
-                  'userName': userName,
-                  'phoneNumber': phoneNumber,
-                  'password': password,
-                  'brandImg': brandImg,
-                },
-              ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: UserInfoTab(
+                      onNext: _goToNextTab,
+                      onUserInfoChanged: _updateUserInfo,
+                      initialData: {
+                        'fullName': fullName,
+                        'brandName': brandName,
+                        'userName': userName,
+                        'phoneNumber': phoneNumber,
+                        'password': password,
+                        'brandImg': brandImg,
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -571,58 +679,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
           position: _slideAnimation,
           child: FadeTransition(
             opacity: _fadeAnimation,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // ****************************************
-                  DeliveryInfoTab(
-                    onZonesChangedWithLocation: _updateZonesWithLocation,
-                    initialZones: selectedZones,
-                  ),
-                  // ****************************************
-
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                        top: BorderSide(
-                            color: Theme.of(context).colorScheme.outline),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: _isSubmitting
-                                ? null
-                                : () => _tabController.animateTo(0),
-                            child: const Text('السابق'),
-                          ),
-                        ),
-                        const Gap(16),
-                        Expanded(
-                          flex: 2,
-                          child: FilledButton(
-                            onPressed:
-                                _isSubmitting ? null : _submitRegistration,
-                            child: _isSubmitting
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : const Text('إنشاء الحساب'),
-                          ),
-                        ),
-                      ],
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: DeliveryInfoTab(
+                      onZonesChangedWithLocation: _updateZonesWithLocation,
+                      initialZones: selectedZones,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

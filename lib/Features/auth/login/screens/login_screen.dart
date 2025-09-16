@@ -252,7 +252,7 @@ class _LoginPageState extends ConsumerState<LoginPage>
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: Stack(
           children: [
             // Background
@@ -269,7 +269,7 @@ class _LoginPageState extends ConsumerState<LoginPage>
                       ),
                       Positioned.fill(
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
@@ -549,87 +549,8 @@ class _LoginPageState extends ConsumerState<LoginPage>
                               ),
                             ),
                             
-                            // مساحة للدفع بالمحتوى للأسفل
-                            const Gap(40),
-                            
-                            // زر تسجيل الدخول في نهاية الشاشة
-                            FillButton(
-                              label: "تسجيل الدخول",
-                              isLoading: loginState.isLoading,
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  final phoneNumber =
-                                      _phoneController.text;
-                                  final password = _passwordController.text;
-
-                                  final result = await ref
-                                      .read(authNotifierProvider.notifier)
-                                      .login(
-                                          passWord: password,
-                                          phonNumber: phoneNumber);
-
-                                  if (result.$1 == null) {
-                                    GlobalToast.show(
-                                      context: context,
-                                      message: result.$2!,
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.error,
-                                      textColor: Colors.white,
-                                    );
-                                  } else {
-                                    {
-                                      GlobalToast.show(
-                                        context: context,
-                                        message: "تم تسجيل الدخول بنجاح",
-                                        backgroundColor:
-                                            context.colorScheme.primary,
-                                        textColor: Colors.white,
-                                      );
-                                      SharedPreferencesHelper.saveUser(
-                                          result.$1!);
-                                      context.go(AppRoutes.home);
-                                    }
-                                  }
-                                }
-                              },
-                            ),
-                            
-                            const Gap(AppSpaces.medium),
-                            
-                            // نص "ليس لديك حساب؟ إنشاء حساب" أسفل زر تسجيل الدخول
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "ليس لديك حساب؟",
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.secondary,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                const Gap(AppSpaces.exSmall),
-                                GestureDetector(
-                                  onTap: () {
-                                    context.go(AppRoutes.registerScreen);
-                                  },
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    child: Text(
-                                      "إنشاء حساب",
-                                      style: TextStyle(
-                                        color: Theme.of(context).colorScheme.primary,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: Theme.of(context).colorScheme.primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            
-                            const Gap(20),
+                            // مساحة إضافية لتجنب اختفاء المحتوى تحت الأزرار الثابتة
+                            const Gap(100),
                           ],
                         ),
                       ),
@@ -639,6 +560,104 @@ class _LoginPageState extends ConsumerState<LoginPage>
               },
             ),
           ],
+        ),
+        // الأزرار الثابتة في الأسفل
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: MediaQuery.of(context).viewPadding.bottom + 20,
+            top: 20,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              top: BorderSide(color: Colors.grey.shade200),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, -2),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // زر تسجيل الدخول
+              FillButton(
+                label: "تسجيل الدخول",
+                isLoading: loginState.isLoading,
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    final phoneNumber = _phoneController.text;
+                    final password = _passwordController.text;
+
+                    final result = await ref
+                        .read(authNotifierProvider.notifier)
+                        .login(
+                            passWord: password,
+                            phonNumber: phoneNumber);
+
+                    if (result.$1 == null) {
+                      GlobalToast.show(
+                        context: context,
+                        message: result.$2!,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.error,
+                        textColor: Colors.white,
+                      );
+                    } else {
+                      GlobalToast.show(
+                        context: context,
+                        message: "تم تسجيل الدخول بنجاح",
+                        backgroundColor: context.colorScheme.primary,
+                        textColor: Colors.white,
+                      );
+                      SharedPreferencesHelper.saveUser(result.$1!);
+                      context.go(AppRoutes.home);
+                    }
+                  }
+                },
+              ),
+              
+              const Gap(16),
+              
+              // نص "ليس لديك حساب؟ إنشاء حساب"
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "ليس لديك حساب؟",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const Gap(AppSpaces.exSmall),
+                  GestureDetector(
+                    onTap: () {
+                      context.go(AppRoutes.registerScreen);
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      child: Text(
+                        "إنشاء حساب",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

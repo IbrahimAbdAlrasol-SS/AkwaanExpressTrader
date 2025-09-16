@@ -131,7 +131,7 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 24),
+        padding: const EdgeInsets.only(bottom: 120),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -637,23 +637,23 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
         _updateParent();
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+         const SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.check_circle, color: Colors.white),
-                const Gap(8),
+                 Icon(Icons.check_circle, color: Colors.white),
+                 Gap(8),
                 Text('تم حفظ الموقع بنجاح',
-                    style: const TextStyle(fontFamily: "Tajawal")),
+                    style:  TextStyle(fontFamily: "Tajawal")),
               ],
             ),
             backgroundColor: Colors.green,
-            duration: const Duration(seconds: 2),
+            duration:  Duration(seconds: 2),
           ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+       const SnackBar(
           content: Text('حدث خطأ في فتح الخريطة',
               style: const TextStyle(fontFamily: "Tajawal")),
           backgroundColor: Colors.red,

@@ -884,46 +884,8 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
               ),
             ),
             const Gap(10),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: FillButton(
-                      label: "التالي",
-                      width: 150,
-                      height: 50,
-                      isLoading: _isUploadingImage,
-                      onPressed: _handleNext,
-                    ),
-                  ),
-                  const Gap(20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "هل لديك حساب؟",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                      const Gap(5),
-                      GestureDetector(
-                        onTap: () => context.go(AppRoutes.login),
-                        child: Text(
-                          "تسجيل الدخول",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            // إضافة مساحة إضافية لتجنب اختفاء المحتوى تحت الأزرار الثابتة
+            const Gap(100),
           ],
         ),
       ),
