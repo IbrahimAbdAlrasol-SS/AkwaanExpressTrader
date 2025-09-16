@@ -41,6 +41,8 @@ class UserInfoTab extends ConsumerStatefulWidget {
   });
 
   @override
+  
+
   ConsumerState<UserInfoTab> createState() => _UserInfoTabState();
 }
 
@@ -96,6 +98,16 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
   @override
   void initState() {
     super.initState();
+
+void _onDataChanged() {
+  _saveCurrentData();
+}
+_fullNameController.addListener(_onDataChanged);
+  _brandNameController.addListener(_onDataChanged);
+  _userNameController.addListener(_onDataChanged);
+  _phoneController.addListener(_onDataChanged);
+  _passwordController.addListener(_onDataChanged);
+  _confirmPasswordController.addListener(_onDataChanged);
 
     // Initialize animation controllers
     _fadeAnimationController = AnimationController(
@@ -504,16 +516,16 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
   }
 
   void _saveCurrentData() {
-    widget.onUserInfoChanged(
-      fullName: _fullNameController.text.trim(),
-      brandName: _brandNameController.text.trim(),
-      userName: _userNameController.text.trim(),
-      phoneNumber: _phoneController.text.trim(),
-      password: _passwordController.text,
-      brandImg: _uploadedImageUrl,
-      expectedOrders: _expectedOrders,
-    );
-  }
+  widget.onUserInfoChanged(
+    fullName: _fullNameController.text.trim(),
+    brandName: _brandNameController.text.trim(),
+    userName: _userNameController.text.trim(),
+    phoneNumber: _phoneController.text.trim(),
+    password: _passwordController.text,
+    brandImg: _uploadedImageUrl,
+    expectedOrders: _expectedOrders, // هذا غير مستخدم - يمكن حذفه
+  );
+}
 
   Future<void> _handleNext() async {
     _saveCurrentData();
@@ -627,6 +639,8 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
               focusNode: _fullNameFocus,
               label: "أسم صاحب المتجر",
               hint: "مثال: \"محمد حسين\"",
+                            suffixInner: _buildFieldStatus(_fullNameController.text.isNotEmpty),
+
               prefixInner: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: SvgPicture.asset(
@@ -666,6 +680,28 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
               },
               onChanged: (value) => _saveCurrentData(),
               onFieldSubmitted: (_) => _userNameFocus.requestFocus(),
+            ),
+            const Gap(10),
+            // حقل اسم المستخدم
+            CustomTextFormField(
+              controller: _userNameController,
+              focusNode: _userNameFocus,
+              label: "اسم المستخدم",
+              hint: "مثال: \"ahmed123\"",
+              prefixInner: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SvgPicture.asset(
+                  "assets/svg/User.svg",
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              validator: (value) {
+                if (value?.trim().isEmpty ?? true) return "اسم المستخدم مطلوب";
+                if (value!.trim().length < 3) return "اسم المستخدم قصير جداً";
+                return null;
+              },
+              onChanged: (value) => _saveCurrentData(),
+              onFieldSubmitted: (_) => _phoneFocus.requestFocus(),
             ),
             const Gap(10),
             _buildExpectedOrdersField(),
@@ -944,4 +980,12 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
       ],
     );
   }
+  
+  Widget _buildFieldStatus(bool isCompleted) {
+  return Icon(
+    isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
+    color: isCompleted ? Colors.green : Colors.grey,
+    size: 20,
+  );
+}
 }

@@ -61,7 +61,7 @@ class _GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
                 color: Colors.black.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Image.asset("assets/svg/map.png", width: 40),
+              child: Image.asset("assets/images/map.png", width: 40),
             ),
           ),
         ],

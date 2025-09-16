@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:Tosell/core/api/client/BaseClient.dart';
+import 'package:Tosell/core/api/client/ApiResponse.dart';
 import 'package:Tosell/core/model_core/User.dart';
 
 class AuthService {
@@ -39,6 +40,7 @@ class AuthService {
   }) async {
     try {
       print('🚀 AuthService: بدء تسجيل التاجر...');
+      print('🔧 BaseClient instance: ${baseClient.toString()}');
       
       // ✅ تدقيق البيانات الأساسية
       print('📝 التحقق من البيانات الأساسية:');
@@ -135,16 +137,64 @@ class AuthService {
       print('   - طول brandName: ${brandName.length} حرف');
 
       // ✅ إرسال الطلب
+      print('📡 AuthService: استدعاء baseClient.create...');
+      print('📡 Endpoint: /auth/merchant-register');
+      print('📡 Data keys: ${requestData.keys.toList()}');
+      
       var result = await baseClient.create(
         endpoint: '/auth/merchant-register',
         data: requestData,
       );
 
-    
+      print('📥 استجابة الخادم:');
+      print('   - Code: ${result.code}');
+      print('   - Message: ${result.message}');
+      print('   - ErrorType: ${result.errorType}');
+      print('   - Errors: ${result.errors}');
+      print('   - Has SingleData: ${result.singleData != null}');
+      print('   - Has ListData: ${result.data?.isNotEmpty ?? false}');
 
+      // ✅ معالجة الأخطاء بشكل أفضل
+      if (result.errorType != null) {
+        String errorMessage;
+        switch (result.errorType) {
+          case ApiErrorType.noInternet:
+            errorMessage = 'لا يوجد اتصال بالإنترنت. تحقق من الاتصال وحاول مرة أخرى';
+            break;
+          case ApiErrorType.timeout:
+            errorMessage = 'انتهت مهلة الاتصال. حاول مرة أخرى';
+            break;
+          case ApiErrorType.unauthorized:
+            errorMessage = 'خطأ في التفويض. تحقق من البيانات';
+            break;
+          case ApiErrorType.serverError:
+            // ✅ عرض رسالة الخطأ من الخادم إذا كانت متوفرة
+            if (result.errors != null && result.errors is Map) {
+              final errors = result.errors as Map;
+              final errorMessages = <String>[];
+              errors.forEach((key, value) {
+                if (value is List) {
+                  errorMessages.addAll(value.map((e) => e.toString()));
+                } else {
+                  errorMessages.add(value.toString());
+                }
+              });
+              errorMessage = errorMessages.isNotEmpty 
+                  ? errorMessages.join('\n') 
+                  : result.message ?? 'خطأ في الخادم';
+            } else {
+              errorMessage = result.message ?? 'خطأ في الخادم';
+            }
+            break;
+          default:
+            errorMessage = result.message ?? 'خطأ غير معروف';
+        }
+        print('❌ AuthProvider: فشل التسجيل - $errorMessage');
+        return (null, errorMessage);
+      }
       
       if (result.code == 200 && result.message == "Operation successful") {
-        
+        print('✅ AuthProvider: تم التسجيل بنجاح - في انتظار الموافقة');
         // ✅ إرجاع حالة خاصة للتمييز
         return (null, "REGISTRATION_SUCCESS_PENDING_APPROVAL");
       }
@@ -152,20 +202,20 @@ class AuthService {
       User? user;
       if (result.singleData != null) {
         user = result.singleData;
-        
+        print('✅ AuthProvider: تم التسجيل وتفعيل الحساب مباشرة');
         return (user, null);
         
       } else if (result.data != null && result.data!.isNotEmpty) {
         user = result.data!.first;
-      
-        
+        print('✅ AuthProvider: تم التسجيل وتفعيل الحساب مباشرة');
         return (user, null);
       }
 
+      print('❌ AuthProvider: استجابة غير متوقعة من الخادم');
       return (null, result.message ?? 'استجابة غير متوقعة من الخادم');
       
     } catch (e) {
-     
+      print('💥 AuthProvider: خطأ استثنائي في التسجيل - ${e.toString()}');
       return (null, 'خطأ في التسجيل: ${e.toString()}');
     }
   }
