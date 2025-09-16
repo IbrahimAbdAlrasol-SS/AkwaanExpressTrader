@@ -517,45 +517,11 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
           ),
         ),
         const Gap(20),
-        _buildExpectedOrdersField(index, zoneInfo),
       ],
     );
   }
 
-  Widget _buildExpectedOrdersField(int index, ZoneLocationInfo zoneInfo) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'الطلبات اليومية المتوقعة',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-              ),
-        ),
-        const Gap(5),
-        CustomTextFormField<String>(
-          label: '',
-          showLabel: false,
-          hint: 'اختر عدد الطلبات المتوقعة',
-          dropdownItems: [
-            const DropdownMenuItem(value: '0-10', child: Text('0-10')),
-            const DropdownMenuItem(value: '11-20', child: Text('11-20')),
-            const DropdownMenuItem(value: '21-30', child: Text('21-30')),
-            const DropdownMenuItem(value: '31-40', child: Text('31-40')),
-            const DropdownMenuItem(value: '41-50', child: Text('41-50')),
-          ],
-          selectedValue: zoneInfo.expectedOrders,
-          onDropdownChanged: (value) {
-            setState(() {
-              zones[index] = zones[index].copyWith(expectedOrders: value);
-            });
-            _updateParent();
-          },
-        ),
-      ],
-    );
-  }
+
 
   Widget _buildAddLocationButton() {
     return Padding(

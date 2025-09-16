@@ -320,9 +320,9 @@ class _LoginPageState extends ConsumerState<LoginPage>
             ),
             
             DraggableScrollableSheet(
-              initialChildSize: 0.79,
-              minChildSize: 0.79,
-              maxChildSize: 0.79,
+              initialChildSize: 0.76,
+              minChildSize: 0.76,
+              maxChildSize: 0.76,
               builder: (context, scrollController) {
                 return Material(
                   color: Colors.transparent,
@@ -569,18 +569,8 @@ class _LoginPageState extends ConsumerState<LoginPage>
             bottom: MediaQuery.of(context).viewPadding.bottom + 20,
             top: 20,
           ),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
-            border: Border(
-              top: BorderSide(color: Colors.grey.shade200),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, -2),
-              ),
-            ],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

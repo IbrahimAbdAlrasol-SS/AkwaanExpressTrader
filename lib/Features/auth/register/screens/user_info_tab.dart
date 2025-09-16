@@ -22,13 +22,14 @@ import 'dart:io';
 
 class UserInfoTab extends ConsumerStatefulWidget {
   final VoidCallback? onNext;
-  final Function({
+  final void Function({
     String? fullName,
     String? brandName,
     String? userName,
     String? phoneNumber,
     String? password,
     String? brandImg,
+    String? expectedOrders,
   }) onUserInfoChanged;
   final Map<String, dynamic> initialData;
 
@@ -73,6 +74,9 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
   // Phone field enhancements
   String _selectedCountryCode = '+964';
   String _formattedPhoneNumber = '';
+
+  // Expected orders field
+  String? _expectedOrders;
 
   // Animation controllers
   late AnimationController _fadeAnimationController;
@@ -384,7 +388,7 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
     try {
       // التحقق من الصلاحيات أولاً
       if (!mounted) return;
-      
+
       final XFile? image = await ImagePicker().pickImage(
         source: source,
         maxWidth: 1024,
@@ -436,7 +440,7 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
         }
 
         if (!mounted) return;
-        
+
         setState(() {
           _brandImage = XFile(imagePath);
           _isUploadingImage = true;
@@ -469,7 +473,7 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
       }
     } catch (e) {
       print('خطأ في اختيار الصورة: $e');
-      
+
       if (mounted) {
         setState(() {
           _isUploadingImage = false;
@@ -477,7 +481,7 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
         });
 
         String errorMessage = 'فشل في اختيار الصورة';
-        
+
         if (e.toString().contains('Permission')) {
           errorMessage = 'يرجى السماح بالوصول للكاميرا والمعرض';
         } else if (e.toString().contains('camera_access_denied')) {
@@ -507,6 +511,7 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
       phoneNumber: _phoneController.text.trim(),
       password: _passwordController.text,
       brandImg: _uploadedImageUrl,
+      expectedOrders: _expectedOrders,
     );
   }
 
@@ -574,12 +579,18 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.3),
                           width: 2,
                         ),
-                        color: _uploadedImageUrl != null 
-                            ? Colors.transparent 
-                            : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                        color: _uploadedImageUrl != null
+                            ? Colors.transparent
+                            : Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.1),
                       ),
                       child: _uploadedImageUrl != null
                           ? ClipRRect(
@@ -656,7 +667,8 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
               onChanged: (value) => _saveCurrentData(),
               onFieldSubmitted: (_) => _userNameFocus.requestFocus(),
             ),
-            
+            const Gap(10),
+            _buildExpectedOrdersField(),
             const Gap(10),
             // Phone field label
             Align(
@@ -716,10 +728,10 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
                     _selectedCountryCode = phone.countryCode;
                     _formattedPhoneNumber = phone.completeNumber;
                   });
-                  
+
                   // Save country code
                   _saveCountryCode(phone.countryCode);
-                  
+
                   // Format Iraqi numbers
                   if (phone.countryISOCode == 'IQ') {
                     final formatted = _formatIraqiPhoneNumber(phone.number);
@@ -745,15 +757,16 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
                   if (phone == null || phone.number.isEmpty) {
                     return 'رقم الهاتف مطلوب';
                   }
-                  
+
                   // Validate Iraqi phone numbers specifically
                   if (phone.countryISOCode == 'IQ') {
-                    final cleanNumber = phone.number.replaceAll(RegExp(r'[^0-9]'), '');
+                    final cleanNumber =
+                        phone.number.replaceAll(RegExp(r'[^0-9]'), '');
                     if (!RegExp(r'^7[0-9]{9}$').hasMatch(cleanNumber)) {
                       return 'رقم الهاتف العراقي غير صحيح';
                     }
                   }
-                  
+
                   return null;
                 },
                 onSubmitted: (_) => _passwordFocus.requestFocus(),
@@ -883,12 +896,52 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
                 onFieldSubmitted: (_) => _handleNext(),
               ),
             ),
-            const Gap(10),
-            // إضافة مساحة إضافية لتجنب اختفاء المحتوى تحت الأزرار الثابتة
-            const Gap(100),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildExpectedOrdersField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'الطلبات اليومية المتوقعة',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+        ),
+        const Gap(10),
+        CustomTextFormField<String>(
+          label: '',
+          showLabel: false,
+          hint: 'اختر عدد الطلبات المتوقعة',
+          dropdownItems: [
+            const DropdownMenuItem(value: '0-10', child: Text('0-10')),
+            const DropdownMenuItem(value: '11-20', child: Text('11-20')),
+            const DropdownMenuItem(value: '21-30', child: Text('21-30')),
+            const DropdownMenuItem(value: '31-40', child: Text('31-40')),
+            const DropdownMenuItem(value: '41-50', child: Text('41-50')),
+          ],
+          selectedValue: _expectedOrders,
+          onDropdownChanged: (value) {
+            setState(() {
+              _expectedOrders = value;
+            });
+            _saveCurrentData();
+          },
+          suffixInner: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: SvgPicture.asset(
+              "assets/svg/CaretDown.svg",
+              width: 24,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
