@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import '../models/receipt_update_model.dart';
 
 class ReceiptItemWidget extends StatelessWidget {
@@ -42,14 +43,14 @@ class ReceiptItemWidget extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: Container(
         width: 398,
-        height: 65,
-        padding: const EdgeInsets.all(16),
+        height: 68,
+        padding: const EdgeInsets.all(11),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: borderRadius,
           border: Border.all(
             color: Theme.of(context).colorScheme.outline,
-            width: 1,
+            width: 0.8,
           ),
         ),
         child: InkWell(
@@ -62,23 +63,12 @@ class ReceiptItemWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     // أيقونة الصندوق
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Icon(
-                        Icons.inventory_2_outlined,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                    Icon(
+                      Icons.inventory_2_outlined,
+                      size: 24,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    const SizedBox(width: 12),
+                    const Gap(9),
                     // العمود الذي يحتوي على رقم الوصل والعنوان
                     Expanded(
                       child: Column(
@@ -89,23 +79,26 @@ class ReceiptItemWidget extends StatelessWidget {
                           Text(
                             receipt.code,
                             style: const TextStyle(
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w500,
                               fontSize: 14,
                               height: 24 / 14,
                               letterSpacing: 0,
+                              color: Color(0xFF8C8C8C),
                             ),
                             textAlign: TextAlign.right,
                           ),
                           // العنوان (الموقع)
+                          const Gap(2),
                           Text(
                             receipt.location,
                             style: const TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              height: 1.0,
-                              letterSpacing: 0,
+                              fontWeight: FontWeight.w700,
+                              fontSize:12 ,
+                             // height:1,
+                            //  letterSpacing: 0,
+                            wordSpacing:1
                             ),
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.left,
                           ),
                         ],
                       ),
@@ -123,17 +116,17 @@ class ReceiptItemWidget extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getStatusColor(receipt.status).withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
+                  color: _getStatusBackgroundColor(receipt.status),
+                  borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: _getStatusColor(receipt.status).withOpacity(0.4),
-                    width: 1.5,
+                    color: _getStatusBackgroundColor(receipt.status),
+                    width: 1,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: _getStatusColor(receipt.status).withOpacity(0.15),
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
+                      color: _getStatusBackgroundColor(receipt.status),
+                      offset: const Offset(0, 0),
+                      blurRadius: 0,
                       spreadRadius: 0,
                     ),
                   ],
@@ -146,7 +139,7 @@ class ReceiptItemWidget extends StatelessWidget {
                       fontSize: 12,
                       height: 24 / 14,
                       letterSpacing: 0,
-                      color: _getStatusColor(receipt.status),
+                      color: _getStatusTextColor(receipt.status),
                     ),
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
@@ -161,14 +154,33 @@ class ReceiptItemWidget extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(String status) {
+  Color _getStatusBackgroundColor(String status) {
     switch (status.toLowerCase()) {
       case 'في المخزن':
-        return const Color(0xFFF0F8FF); // #F0F8FF
+        return const Color.fromARGB(255, 224, 238, 250); // #F0F8FF
       case 'قيد الاستحصال':
-        return const Color(0xFFFDFDF6); // #FDFDF6
+        return const Color.fromARGB(255, 255, 255, 226); // #FDFDF6
       case 'تم التسليم':
-        return const Color(0xFFF7FDFA); // #F7FDFA
+        return const Color.fromARGB(255, 231, 255, 243); // #F7FDFA
+      case 'قيد التوصيل':
+        return Colors.purple.withOpacity(0.1);
+      case 'مؤجل':
+        return Colors.grey.withOpacity(0.1);
+      case 'راجع':
+        return Colors.red.withOpacity(0.1);
+      default:
+        return Colors.grey.withOpacity(0.1);
+    }
+  }
+
+  Color _getStatusTextColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'في المخزن':
+        return const Color(0xFF2A68A3); // #2A68A3
+      case 'قيد الاستحصال':
+        return const Color(0xFFDDC73C); // #DDC73C
+      case 'تم التسليم':
+        return const Color(0xFF125438); // #125438
       case 'قيد التوصيل':
         return Colors.purple;
       case 'مؤجل':

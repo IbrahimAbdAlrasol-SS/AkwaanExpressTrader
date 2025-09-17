@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Tosell/core/model_core/User.dart';
+import 'package:gap/gap.dart';
 
 class WelcomeTextWidget extends StatelessWidget {
   final User user;
@@ -15,17 +16,18 @@ class WelcomeTextWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'مرحباً بك',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+          'مرحبا بك 👋',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
               ),
         ),
-        const SizedBox(height: 2),
+        const Gap(2),
         Text(
           user.fullName ?? user.userName ?? 'المستخدم',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
+                //fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.outline,
               ),
         ),
       ],

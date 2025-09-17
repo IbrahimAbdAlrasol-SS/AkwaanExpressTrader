@@ -18,22 +18,14 @@ class InvoiceHistoryColumnWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // أيقونة سجل الفواتير
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: SvgPicture.asset(
-                'assets/svg/invoice.svg',
-                width: 20,
-                height: 20,
-                colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.primary,
-                  BlendMode.srcIn,
-                ),
+          Center(
+            child: SvgPicture.asset(
+              'assets/svg/invoice.svg',
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onSecondary,
+                BlendMode.srcIn,
               ),
             ),
           ),
@@ -43,7 +35,7 @@ class InvoiceHistoryColumnWidget extends StatelessWidget {
             'سجل الفواتير',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
             textAlign: TextAlign.center,
           ),

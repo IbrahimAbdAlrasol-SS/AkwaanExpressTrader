@@ -18,6 +18,7 @@ class AppTheme {
       outline: Color(0xFFEAEEF0), // Outline color
       onSurfaceVariant: Color(0xFF49454F),
       surfaceContainerLow: Color(0xFFEAEEF0),
+      surfaceContainerHighest: Color(0xFFF0F0F0),
     ),
   );
 

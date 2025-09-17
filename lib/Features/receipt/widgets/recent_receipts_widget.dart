@@ -30,9 +30,10 @@ class RecentReceiptsWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text(
             'آخر تحديثات الوصولات',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
+                  fontSize: 15,
                 ),
           ),
         ),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
 
 class FinancialSummaryWidget extends StatelessWidget {
   final String receivablesAmount;
@@ -14,43 +12,76 @@ class FinancialSummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline,
-          width: 1,
-        ),
-      ),
+    return IntrinsicHeight(
       child: Row(
         children: [
-          // المستحقات
+          // العمود الأول - المستحقات
           Expanded(
-            child: _buildFinancialItem(
-              context,
-              'المستحقات',
-              receivablesAmount,
-              'assets/svg/dollar.svg',
-              Colors.green,
+            child: _buildReceivablesColumn(),
+          ),
+          // الفاصل العمودي
+          _buildVerticalDivider(),
+          // العمود الثاني - الديون
+          Expanded(
+            child: _buildDebtsColumn(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // العمود الأول - المستحقات
+  Widget _buildReceivablesColumn() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // نص المستحقات
+          const Text(
+            'المستحقات',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              height: 1.0,
+              letterSpacing: 0,
+              color: Colors.white70,
             ),
+            textAlign: TextAlign.left,
           ),
-          // فاصل عمودي
-          Container(
-            width: 1,
-            height: 40,
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-          ),
-          // الديون
-          Expanded(
-            child: _buildFinancialItem(
-              context,
-              'الديون',
-              debtsAmount,
-              'assets/svg/wallet.svg',
-              Colors.red,
+          // المبلغ مع العلامة الموجبة
+          RichText(
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            softWrap: false,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: receivablesAmount,
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                const TextSpan(
+                  text: ' + ',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                const TextSpan(
+                  text: 'د.ع',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -58,53 +89,76 @@ class FinancialSummaryWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFinancialItem(
-    BuildContext context,
-    String label,
-    String amount,
-    String iconPath,
-    Color color,
-  ) {
+  // العمود الثاني - الديون
+  Widget _buildDebtsColumn() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // الأيقونة
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
+        // نص الديون
+        const Text(
+          'الديون',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            height: 1.0,
+            letterSpacing: 0,
+            color: Colors.white70,
           ),
-          child: Center(
-            child: SvgPicture.asset(
-              iconPath,
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                color,
-                BlendMode.srcIn,
+          textAlign: TextAlign.left,
+        ),
+        // المبلغ مع العلامة السالبة
+        RichText(
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          softWrap: false,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: debtsAmount,
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
               ),
-            ),
+              const TextSpan(
+                text: ' - ',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              const TextSpan(
+                text: 'د.ع',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
           ),
-        ),
-        const Gap(8),
-        // المبلغ
-        Text(
-          amount,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-        ),
-        const Gap(4),
-        // التسمية
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-              ),
         ),
       ],
+    );
+  }
+
+  // الفاصل العمودي
+  Widget _buildVerticalDivider() {
+    return Transform.rotate(
+      angle: -90 * 3.14159 / 180, // تحويل -90 درجة إلى راديان
+      child: Container(
+        width: 66,
+        height: 1,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Color(0xFFF0F0F0),
+            width: 1,
+          ),
+        ),
+      ),
     );
   }
 }

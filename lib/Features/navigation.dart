@@ -81,10 +81,10 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
             onTap: onItemTapped,
             items: [
               _buildNavItem("assets/svg/navigation_home.svg", "الرئيسية", 0),
-              _buildNavItem("assets/svg/navigation_box.svg", "الطلبات", 1),
+              _buildNavItem("assets/svg/navigation_box.svg", "الوصولات", 1),
               _buildNavItem("assets/svg/navigation_add.svg", "جديد", 2),
               _buildNavItem("assets/svg/navigation_statstic.svg", "الإحصائيات", 3),
-              _buildNavItem("assets/svg/navigation_profile.svg", "الإعدادات", 4),
+              _buildNavItem("assets/svg/navigation_profile.svg", "حسابي", 4),
             ],
           ),
         );
@@ -108,7 +108,7 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
                   : index == 2 || index == 5
                       ? Theme.of(context).colorScheme.primary.withAlpha(20)
                       : Colors.transparent,
-              borderRadius: BorderRadius.circular(125),
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
           SvgPicture.asset(
@@ -117,7 +117,7 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
             colorFilter: isSelected
                 ? const ColorFilter.mode(Colors.white, BlendMode.srcIn)
                 : index == 2 || index == 5
-                    ? const ColorFilter.mode(Color(0xFF0C6E4C), BlendMode.srcIn)
+                    ? const ColorFilter.mode(Color.fromARGB(255, 12, 76, 110), BlendMode.srcIn)
                     : ColorFilter.mode(
                         Theme.of(context).colorScheme.secondary,
                         BlendMode.srcIn,

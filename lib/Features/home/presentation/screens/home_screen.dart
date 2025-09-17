@@ -34,31 +34,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     var homeState = ref.watch(homeNotifierProvider);
     var userState = ref.watch(profileNotifierProvider);
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.0, 0.4, 0.4, 1.0],
-              colors: [
-                Color(0xFF1A66FF), // لون الجزء العلوي
-                Color(0xFF134AB9), // نهاية الجزء العلوي
-                Colors.white, // بداية الجزء السفلي الأبيض
-                Colors.white, // نهاية الجزء السفلي الأبيض
-              ],
-            ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.0, 0.35, 0.35, 1.0],
+            colors: [
+              Color(0xFF134AB9), // لون الجزء العلوي
+              Color(0xFF1A66FF),
+              Colors.white, // بداية الجزء السفلي الأبيض
+              Colors.white, // نهاية الجزء السفلي الأبيض
+            ],
           ),
-          child: homeState.when(
-            data: (data) =>
-                _buildUi(context, user: userState.value ?? User(), home: data),
-            error: (error, _) => Center(
-              child: Text(error.toString()),
-            ),
-            loading: () => const Center(child: CircularProgressIndicator()),
+        ),
+        child: homeState.when(
+          data: (data) =>
+              _buildUi(context, user: userState.value ?? User(), home: data),
+          error: (error, _) => Center(
+            child: Text(error.toString()),
           ),
+          loading: () => const Center(child: CircularProgressIndicator()),
         ),
       ),
     );
@@ -69,16 +67,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const Gap(15),
+          const Gap(35),
           HomeHeaderWidget(
             user: user,
             home: home,
           ),
+          Gap(30),
           const FinancialSummaryWidget(
-            receivablesAmount: '200,000',
+            receivablesAmount: '90,000',
             debtsAmount: '50,000',
           ),
-          const Gap(10),
+          const Gap(40),
           ActionCounterWidget(
             onAddReceiptTap: () {
               print('تم الضغط على إضافة وصل');
