@@ -454,6 +454,13 @@ class _LoginPageState extends ConsumerState<LoginPage>
                                           return 'رقم الهاتف مطلوب';
                                         }
                                         
+                                        // Validate Iraqi phone numbers specifically
+                                        if (phone.countryISOCode == 'IQ') {
+                                          if (!_isValidIraqiPhoneNumber(phone.number)) {
+                                            return 'رقم الهاتف العراقي غير صحيح';
+                                          }
+                                        }
+                                        
                                         return null;
                                       },
                                     ),
@@ -471,12 +478,7 @@ class _LoginPageState extends ConsumerState<LoginPage>
                                        hint: '******',
                                        
                                       fillColor: Colors.grey.shade50,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'كلمة المرور مطلوبة';
-                                        }
-                                        return null;
-                                      },
+                                      validator: _validatePasswordStrength,
                                       onChanged: (value) {
                                         // Format password display as *** *** **
                                         if (_obscurePassword && value.isNotEmpty) {

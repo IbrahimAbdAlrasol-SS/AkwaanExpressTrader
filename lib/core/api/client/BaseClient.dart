@@ -39,27 +39,32 @@ class BaseClient<T> {
     required String endpoint,
     required Map<String, dynamic> data,
   }) async {
-    print('🌐 BaseClient.create() - بدء HTTP POST Request');
-    print('  - URL: $baseUrl$endpoint');
-    print('  - Data: $data');
+    developer.log('🌐 BaseClient.create() - بدء HTTP POST Request',
+        name: 'BaseClient');
+    developer.log('  - URL: $baseUrl$endpoint', name: 'BaseClient');
+    developer.log('  - Data: $data', name: 'BaseClient');
 
     try {
-      print('📡 إرسال POST request...');
+      developer.log('📡 إرسال POST request...', name: 'BaseClient');
       final response = await _dio.post(endpoint, data: data);
 
-      print('📥 استجابة HTTP:');
-      print('  - Status Code: ${response.statusCode}');
-      print('  - Response Data: ${response.data}');
+      developer.log('📥 استجابة HTTP:', name: 'BaseClient');
+      developer.log('  - Status Code: ${response.statusCode}',
+          name: 'BaseClient');
+      developer.log('  - Response Data: ${response.data}', name: 'BaseClient');
 
       final result = _handleResponse(response);
-      print('✅ تم معالجة الاستجابة بنجاح');
+      developer.log('✅ تم معالجة الاستجابة بنجاح', name: 'BaseClient');
       return result;
     } on DioException catch (e) {
-      print('💥 DioException في BaseClient.create():');
-      print('  - Type: ${e.type}');
-      print('  - Message: ${e.message}');
-      print('  - Status Code: ${e.response?.statusCode}');
-      print('  - Response Data: ${e.response?.data}');
+      developer.log('💥 DioException في BaseClient.create():',
+          name: 'BaseClient');
+      developer.log('  - Type: ${e.type}', name: 'BaseClient');
+      developer.log('  - Message: ${e.message}', name: 'BaseClient');
+      developer.log('  - Status Code: ${e.response?.statusCode}',
+          name: 'BaseClient');
+      developer.log('  - Response Data: ${e.response?.data}',
+          name: 'BaseClient');
       return _handleDioError(e);
     }
   }
@@ -174,32 +179,11 @@ class BaseClient<T> {
         name: 'BaseClient');
     developer.log('  - Status Code: ${response.statusCode}',
         name: 'BaseClient');
-    
-    // طباعة البيانات الخام من الخادم
-    print('📄 BaseClient - البيانات الخام من الخادم:');
-    print('  - Raw Response: ${response.data}');
-    print('  - Response Type: ${response.data.runtimeType}');
-    
-    if (response.data is Map<String, dynamic>) {
-      final Map<String, dynamic> responseMap = response.data;
-      print('📋 BaseClient - تفاصيل الاستجابة:');
-      print('  - Contains code: ${responseMap.containsKey("code")}');
-      print('  - Contains message: ${responseMap.containsKey("message")}');
-      print('  - Contains data: ${responseMap.containsKey("data")}');
-      print('  - Contains errors: ${responseMap.containsKey("errors")}');
-      if (responseMap.containsKey('code')) {
-        print('  - Code value: ${responseMap["code"]}');
-      }
-      if (responseMap.containsKey('message')) {
-        print('  - Message value: ${responseMap["message"]}');
-      }
-    }
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       developer.log('✅ استجابة ناجحة - تحويل البيانات', name: 'BaseClient');
       final result = ApiResponse.fromJsonAuto(response.data, fromJson!);
-      developer.log('  - Parsed Code: ${result.code}', name: 'BaseClient');
-      developer.log('  - Parsed Message: ${result.message}', name: 'BaseClient');
+      developer.log('  - Message: ${result.message}', name: 'BaseClient');
       developer.log('  - Has Single Data: ${result.singleData != null}', name: 'BaseClient');
       developer.log('  - Has List Data: ${result.data?.isNotEmpty ?? false}', name: 'BaseClient');
       return ApiResponse<T>(
@@ -227,11 +211,10 @@ class BaseClient<T> {
   }
 
   ApiResponse<T> _handleDioError(DioException e) {
-    print('💥 BaseClient._handleDioError() - معالجة خطأ Dio');
-    print('  - Exception Type: ${e.type}');
-    print('  - Exception Message: ${e.message}');
-    print('  - Response Data: ${e.response?.data}');
-    print('  - Status Code: ${e.response?.statusCode}');
+    developer.log('💥 BaseClient._handleDioError() - معالجة خطأ Dio',
+        name: 'BaseClient');
+    developer.log('  - Exception Type: ${e.type}', name: 'BaseClient');
+    developer.log('  - Exception Message: ${e.message}', name: 'BaseClient');
 
     ApiErrorType errorType;
     String message = '';

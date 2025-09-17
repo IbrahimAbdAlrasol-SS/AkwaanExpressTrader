@@ -1,3 +1,4 @@
+import 'package:Tosell/Features/navigation.dart';
 import 'package:Tosell/Features/order/orders/models/OrderFilter.dart';
 import 'package:Tosell/Features/order/orders/screens/orders_screen.dart';
 import 'package:Tosell/Features/order/orders/screens/shipment_details_screen.dart';
@@ -17,7 +18,7 @@ import 'package:Tosell/features/auth/login/screens/login_screen.dart';
 
 import 'package:Tosell/features/auth/register/screens/map_selection_screen.dart';
 import 'package:Tosell/features/auth/register/screens/register_screen.dart';
-import 'package:Tosell/features/navigation.dart';
+// import 'package:Tosell/features/navigation.dart';
 import 'package:Tosell/features/notification/screens/notification_screen.dart';
 
 import 'package:Tosell/features/order/screens/add_order_screen.dart';
@@ -92,11 +93,11 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) =>
           const BackgroundWrapper(child: OrderScreen()),
     ),
-    GoRoute(
-      path: AppRoutes.notifications,
-      builder: (context, state) =>
-          const BackgroundWrapper(child: NotificationPage()),
-    ),
+    // GoRoute(
+    //   path: AppRoutes.notifications,
+    //   builder: (context, state) =>
+    //       const BackgroundWrapper(child: NotificationPage()),
+    // ),
     GoRoute(
       path: AppRoutes.deleteAccount,
       builder: (context, state) =>

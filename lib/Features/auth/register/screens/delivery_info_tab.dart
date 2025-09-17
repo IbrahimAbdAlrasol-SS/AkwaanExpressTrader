@@ -474,7 +474,7 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
                 width: hasLocation ? 2 : 1,
               ),
               image: const DecorationImage(
-                image: AssetImage('assets/images/map.png'),
+                image: AssetImage('assets/images/Map.png'),
                 fit: BoxFit.cover,
               ),
             ),

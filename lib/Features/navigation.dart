@@ -146,4 +146,3 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
   }
 }
 
-

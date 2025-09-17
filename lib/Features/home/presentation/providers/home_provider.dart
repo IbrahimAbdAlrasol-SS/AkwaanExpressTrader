@@ -1,7 +1,7 @@
 // lib/core/providers/home/home_provider.dart
 import 'dart:async';
-import 'package:Tosell/features/home/data/models/Home.dart';
-import 'package:Tosell/features/home/data/services/home_service.dart';
+import 'package:Tosell/Features/home/data/models/Home.dart';
+import 'package:Tosell/Features/home/data/services/home_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_provider.g.dart';
