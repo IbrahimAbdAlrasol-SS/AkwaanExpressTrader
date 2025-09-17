@@ -1,7 +1,7 @@
 
-import 'package:Tosell/features/home/presentation/widgets/brand_image_widget.dart';
-import 'package:Tosell/features/home/presentation/widgets/welcome_text_widget.dart';
-import 'package:Tosell/features/home/presentation/widgets/notification_button_widget.dart';
+import 'package:Tosell/Features/home/presentation/widgets/brand_image_widget.dart';
+import 'package:Tosell/Features/home/presentation/widgets/welcome_text_widget.dart';
+import 'package:Tosell/Features/home/presentation/widgets/notification_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:Tosell/core/model_core/User.dart';
 import 'package:gap/gap.dart';

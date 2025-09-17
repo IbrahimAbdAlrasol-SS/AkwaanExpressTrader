@@ -1,26 +1,26 @@
-import 'package:Tosell/features/home/data/models/Home.dart';
-import 'package:Tosell/features/home/presentation/providers/home_provider.dart';
-import 'package:Tosell/features/profile/providers/profile_provider.dart';
-import 'package:Tosell/features/profile/screens/myProfile_Screen.dart';
-import 'package:Tosell/features/receipt/widgets/recent_receipts_widget.dart';
+import 'package:Tosell/Features/home/data/models/Home.dart';
+import 'package:Tosell/Features/home/presentation/providers/home_provider.dart';
+import 'package:Tosell/Features/profile/providers/profile_provider.dart';
+import 'package:Tosell/Features/profile/screens/myProfile_Screen.dart';
+import 'package:Tosell/Features/receipt/widgets/recent_receipts_widget.dart';
 import 'package:Tosell/core/config/constants/spaces.dart';
 import 'package:Tosell/core/config/routes/app_router.dart';
 import 'package:Tosell/core/model_core/User.dart';
 import 'package:Tosell/core/widgets/Others/CustomAppBar.dart';
 import 'package:Tosell/core/widgets/Others/build_cart.dart';
-import 'package:Tosell/features/home/presentation/providers/home_provider.dart'
+import 'package:Tosell/Features/home/presentation/providers/home_provider.dart'
     hide homeNotifierProvider;
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:Tosell/features/notification/screens/notification_screen.dart';
+import 'package:Tosell/Features/notification/screens/notification_screen.dart';
 import '../widgets/home_header_widget.dart';
 import '../widgets/action_counter_widget.dart';
 import '../widgets/comprehensive_statistics_widget.dart';
 import '../widgets/financial_summary_widget.dart';
-import 'package:Tosell/features/receipt/models/receipt_update_model.dart';
+import 'package:Tosell/Features/receipt/models/receipt_update_model.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -37,13 +37,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: homeState.when(
-          data: (data) =>
-              _buildUi(context, user: userState.value ?? User(), home: data),
-          error: (error, _) => Center(
-            child: Text(error.toString()),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.0, 0.4, 0.4, 1.0],
+              colors: [
+                Color(0xFF1A66FF), // لون الجزء العلوي
+                Color(0xFF134AB9), // نهاية الجزء العلوي
+                Colors.white, // بداية الجزء السفلي الأبيض
+                Colors.white, // نهاية الجزء السفلي الأبيض
+              ],
+            ),
           ),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          child: homeState.when(
+            data: (data) =>
+                _buildUi(context, user: userState.value ?? User(), home: data),
+            error: (error, _) => Center(
+              child: Text(error.toString()),
+            ),
+            loading: () => const Center(child: CircularProgressIndicator()),
+          ),
         ),
       ),
     );

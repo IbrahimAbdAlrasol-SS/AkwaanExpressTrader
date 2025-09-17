@@ -1,7 +1,7 @@
 import 'package:Tosell/core/config/constants/spaces.dart';
 import 'package:Tosell/core/widgets/buttons/FillButton.dart';
 import 'package:Tosell/core/widgets/inputs/CustomTextFormField.dart';
-import 'package:Tosell/features/statistics/widgets/google_map_widget.dart';
+import 'package:Tosell/Features/statistics/widgets/google_map_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
