@@ -81,8 +81,8 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
             onTap: onItemTapped,
             items: [
               _buildNavItem("assets/svg/navigation_home.svg", "الرئيسية", 0),
-              _buildNavItem("assets/svg/navigation_box.svg", "الوصولات", 1),
-              _buildNavItem("assets/svg/navigation_add.svg", "جديد", 2),
+              _buildNavItem("assets/svg/Receipt.svg", "الوصولات", 1),
+              _buildNavItem("assets/svg/navigation_add.svg", "", 2),
               _buildNavItem("assets/svg/navigation_statstic.svg", "الإحصائيات", 3),
               _buildNavItem("assets/svg/navigation_profile.svg", "حسابي", 4),
             ],
