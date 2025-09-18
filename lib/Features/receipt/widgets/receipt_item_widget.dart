@@ -117,7 +117,7 @@ class ReceiptItemWidget extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
                   color: _getStatusBackgroundColor(receipt.status),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(24),
                   border: Border.all(
                     color: _getStatusBackgroundColor(receipt.status),
                     width: 1,

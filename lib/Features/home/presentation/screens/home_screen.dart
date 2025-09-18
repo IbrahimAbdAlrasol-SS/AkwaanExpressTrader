@@ -3,6 +3,8 @@ import 'package:Tosell/Features/home/presentation/providers/home_provider.dart';
 import 'package:Tosell/Features/profile/providers/profile_provider.dart';
 import 'package:Tosell/Features/profile/screens/myProfile_Screen.dart';
 import 'package:Tosell/Features/receipt/widgets/recent_receipts_widget.dart';
+import 'package:Tosell/Features/notification/widgets/recent_notifications_widget.dart';
+import 'package:Tosell/Features/notification/models/notification_model.dart';
 import 'package:Tosell/core/config/constants/spaces.dart';
 import 'package:Tosell/core/config/routes/app_router.dart';
 import 'package:Tosell/core/model_core/User.dart';
@@ -67,12 +69,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const Gap(35),
+          const Gap(40),
           HomeHeaderWidget(
             user: user,
             home: home,
           ),
-          Gap(30),
+          Gap(40),
           const FinancialSummaryWidget(
             receivablesAmount: '90,000',
             debtsAmount: '50,000',
@@ -89,9 +91,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               print('تم الضغط على سجل الفواتير');
             },
           ),
-          const Gap(10),
+          const Gap(20),
           const ComprehensiveStatisticsWidget(),
-          const Gap(16),
+          const Gap(20),
           RecentReceiptsWidget(
             receipts: _getSampleReceipts(),
             onReceiptTap: (receipt) {
@@ -102,6 +104,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               print('تم الضغط على عرض المزيد');
             },
           ),
+          const Gap(20),
+          RecentNotificationsWidget(
+            notifications: _getSampleNotifications(),
+            onNotificationTap: (notification) {
+              print('تم الضغط على الإشعار: ${notification.title}');
+              // يمكن إضافة التنقل إلى صفحة تفاصيل الإشعار هنا
+            },
+            onViewMore: () {
+              print('تم الضغط على عرض المزيد من الإشعارات');
+            },
+          ),
+           const Gap(20),
+
+
+          
         ],
       ),
     );
@@ -154,41 +171,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         location: 'بغداد - الجادرية',
         updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
       ),
-      ReceiptUpdateModel(
-        id: '3',
-        code: '#002942',
-        status: 'تم التسليم',
-        location: 'بغداد - الكاظمية',
-        updatedAt: DateTime.now().subtract(const Duration(hours: 5)),
+     
+    ];
+  }
+
+  List<NotificationModel> _getSampleNotifications() {
+    return [
+      NotificationModel(
+        id: '1',
+        type: NotificationType.order,
+        title: 'طلب جديد',
+        description: 'تم استلام طلب جديد برقم #002950 من العميل أحمد محمد',
+        createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
+        isRead: false,
       ),
-      ReceiptUpdateModel(
-        id: '4',
-        code: '#002943',
-        status: 'قيد التوصيل',
-        location: 'بغداد - الأعظمية',
-        updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+      NotificationModel(
+        id: '2',
+        type: NotificationType.delivery,
+        title: 'تم التسليم',
+        description: 'تم تسليم الطلب #002948 بنجاح إلى العميل في بغداد - الكرادة',
+        createdAt: DateTime.now().subtract(const Duration(hours: 1)),
+        isRead: false,
       ),
-      ReceiptUpdateModel(
-        id: '5',
-        code: '#002944',
-        status: 'مؤجل',
-        location: 'بغداد - المنصور',
-        updatedAt: DateTime.now().subtract(const Duration(days: 2)),
-      ),
-      ReceiptUpdateModel(
-        id: '6',
-        code: '#002945',
-        status: 'في الطريق',
-        location: 'بغداد - الدورة',
-        updatedAt: DateTime.now().subtract(const Duration(days: 3)),
-      ),
-      ReceiptUpdateModel(
-        id: '7',
-        code: '#002946',
-        status: 'تم الاستلام',
-        location: 'بغداد - الشعلة',
-        updatedAt: DateTime.now().subtract(const Duration(days: 4)),
-      ),
+     
     ];
   }
 }
