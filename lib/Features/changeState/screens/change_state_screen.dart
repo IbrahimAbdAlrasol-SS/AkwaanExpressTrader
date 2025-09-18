@@ -1,9 +1,5 @@
 import 'dart:collection';
 
-import 'package:Tosell/Features/order/orders/models/Order.dart';
-import 'package:Tosell/Features/order/orders/models/order_enum.dart';
-import 'package:Tosell/Features/order/providers/order_commands_provider.dart';
-import 'package:Tosell/Features/order/screens/order_state_bottom_sheet.dart';
 import 'package:Tosell/core/config/constants/spaces.dart';
 import 'package:Tosell/core/config/routes/app_router.dart';
 import 'package:Tosell/core/utils/extensions/GlobalToast.dart';
@@ -40,18 +36,10 @@ class _ChangeStateScreenState extends ConsumerState<ChangeStateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final orderAsync = ref.watch(getOrderByCodeProvider(widget.code));
-
-    return Scaffold(
-      body: orderAsync.when(
-        data: (order) => buildUi(context, order),
-        error: (error, stack) => _buildCodeNotFound(error),
-        loading: () => const Center(child: CircularProgressIndicator()),
-      ),
-    );
+    return Scaffold();
   }
 
-  Widget buildUi(BuildContext context, Order? order) {
+  Widget buildUi(BuildContext context, order) {
     if (order == null) {
       return const Center(child: Text('لايوجد طلب بهذا الكود '));
     }
@@ -95,27 +83,6 @@ class _ChangeStateScreenState extends ConsumerState<ChangeStateScreen> {
                             color: Theme.of(context).colorScheme.outline,
                           ),
                           const Gap(AppSpaces.small),
-                          buildOrderSection(
-                            "حالة الطلب",
-                            "assets/svg/SpinnerGap.svg",
-                            Theme.of(context),
-                            padding: const EdgeInsets.only(bottom: 3, top: 3),
-                            subWidget: Container(
-                              width: 100,
-                              height: 26,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF8F5FF),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  orderStatus[handelProductState(order.status!)]
-                                          .name ??
-                                      'لايوجد',
-                                ),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -148,30 +115,7 @@ class _ChangeStateScreenState extends ConsumerState<ChangeStateScreen> {
                     IntrinsicHeight(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildOrderSection("الحجم",
-                              "assets/svg/CalendarBlank.svg", Theme.of(context),
-                              padding: const EdgeInsets.only(bottom: 3, top: 3),
-                              subWidget: Text(order.size == null
-                                  ? "لايوجد"
-                                  : orderSizes[order.size!].name!)),
-                          VerticalDivider(
-                            width: 1,
-                            thickness: 1,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                          const Gap(AppSpaces.small),
-                          // buildOrderSection(
-                          //   "الفئة",
-                          //   "assets/svg/MapPinArea.svg",
-                          //   Theme.of(context),
-                          //   padding: const EdgeInsets.only(bottom: 3, top: 3),
-                          //   subWidget: Text(
-                          //       order.category == null || order.category == ""
-                          //           ? "لايوجد"
-                          //           : order.category!),
-                          // ),
-                        ],
+                        children: [],
                       ),
                     ),
                   ],
@@ -252,15 +196,7 @@ class _ChangeStateScreenState extends ConsumerState<ChangeStateScreen> {
                   content: order.content ?? "لايوجد",
                   selectAble: order.status == 5,
                 ),
-                _buildOrderState(
-                    context,
-                    orderStatus[handelProductState(order.status!)],
-                    order.status!),
-                _buildOrderState(
-                    context,
-                    title: 'حالة الطلب القادمة',
-                    orderStatus[handelProductState(order.status! + 1)],
-                    order.status!),
+
                 const Gap(AppSpaces.medium),
                 Container(
                   padding: AppSpaces.allMedium,
@@ -293,35 +229,8 @@ class _ChangeStateScreenState extends ConsumerState<ChangeStateScreen> {
                           label: "تاكيد التغيير",
                           isLoading: isButtonLoading,
                           onPressed: () async {
-                            Order? result;
                             String? error;
                             changeLoadingState(true);
-                            try {
-                              (result, error) = await ref
-                                  .read(orderCommandsNotifierProvider.notifier)
-                                  .changeOrderState(code: widget.code);
-                              changeLoadingState(false);
-                            } catch (e) {
-                              error = e.toString();
-                              changeLoadingState(false);
-                            }
-
-                            if (result == null) {
-                              GlobalToast.show(
-                                context: context,
-                                message: error!,
-                                backgroundColor: context.colorScheme.error,
-                                textColor: Colors.white,
-                              );
-                            } else {
-                              GlobalToast.show(
-                                context: context,
-                                message: 'تمت العملية بنجاح',
-                                backgroundColor: context.colorScheme.primary,
-                                textColor: Colors.white,
-                              );
-                              context.go(AppRoutes.home);
-                            }
                           },
                         ),
                       ),
@@ -445,133 +354,52 @@ class _ChangeStateScreenState extends ConsumerState<ChangeStateScreen> {
     );
   }
 
-  Widget _buildOrderState(BuildContext context, OrderEnum state, int index,
-      {String title = "حالة الطلب"}) {
-    return GestureDetector(
-      onTap: () => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        // Remove isScrollControlled or keep it only if you really need scrolling
-        builder: (BuildContext context) {
-          return SizedBox(
-            height: 660,
-            child: OrderStateBottomSheet(
-              state: index,
-            ),
-          );
-        },
-      ),
-      child: CustomSection(
-        title: title,
-        icon: SvgPicture.asset(
-          'assets/svg/ArrowsDownUp.svg',
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        children: [
-          Expanded(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 8),
-              child: Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.outline,
+  Widget buildOrderSection(
+    String title,
+    String iconPath,
+    ThemeData theme, {
+    void Function()? onTap,
+    EdgeInsets? padding,
+    Widget? subWidget,
+  }) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(3),
+                child: SvgPicture.asset(
+                  iconPath,
+                  width: 24,
+                  height: 24,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: theme.colorScheme.secondary,
+                        fontFamily: "Tajawal",
                       ),
                     ),
-                    child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SvgPicture.asset(
-                          state.icon!,
-                          color: context.colorScheme.primary,
-                        )),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          state.name!,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            color: context.colorScheme.primary,
-                            fontFamily: "Tajawal",
-                          ),
-                        ),
-                        Text(
-                          state.description!,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: "Tajawal",
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                    if (subWidget != null) subWidget
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
-}
-
-Widget buildOrderSection(
-  String title,
-  String iconPath,
-  ThemeData theme, {
-  void Function()? onTap,
-  EdgeInsets? padding,
-  Widget? subWidget,
-}) {
-  return Expanded(
-    child: GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(3),
-              child: SvgPicture.asset(
-                iconPath,
-                width: 24,
-                height: 24,
-                color: theme.colorScheme.primary,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: theme.colorScheme.secondary,
-                      fontFamily: "Tajawal",
-                    ),
-                  ),
-                  if (subWidget != null) subWidget
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
 }

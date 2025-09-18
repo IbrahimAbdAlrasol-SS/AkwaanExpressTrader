@@ -1,4 +1,3 @@
-import 'package:Tosell/Features/order/screens/order_details_screen.dart';
 import 'package:Tosell/Features/profile/models/transaction.dart';
 import 'package:Tosell/Features/profile/models/transaction_enum.dart';
 import 'package:Tosell/core/config/constants/spaces.dart';
@@ -42,33 +41,7 @@ class TransactionDetailsScreen extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        buildOrderSection("رقم المعاملة",
-                            "assets/svg/HashStraight.svg", Theme.of(context),
-                            padding: const EdgeInsets.only(bottom: 3, top: 3),
-                            subWidget: const Text('لايوجد')),
-                        VerticalDivider(
-                          width: 1,
-                          thickness: 1,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        const Gap(AppSpaces.small),
-                        buildOrderSection(
-                          "حالة الطلب",
-                          "assets/svg/SpinnerGap.svg",
-                          Theme.of(context),
-                          padding: const EdgeInsets.only(bottom: 3, top: 3),
-                          subWidget: Container(
-                            width: 100,
-                            height: 26,
-                            decoration: BoxDecoration(
-                              color: state.color,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: Text(state.screenTitle!),
-                            ),
-                          ),
-                        ),
+                       
                       ],
                     ),
                   ),
@@ -76,28 +49,7 @@ class TransactionDetailsScreen extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        buildOrderSection(
-                          "التاريخ",
-                          "assets/svg/CalendarBlank.svg",
-                          Theme.of(context),
-                          padding: const EdgeInsets.only(bottom: 3, top: 3),
-                          subWidget:
-                              Text("${date.day}.${date.month}.${date.year}"),
-                        ),
-                        VerticalDivider(
-                          width: 1,
-                          thickness: 1,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        const Gap(AppSpaces.small),
-                        buildOrderSection(
-                          "السعر",
-                          "assets/svg/coines.svg",
-                          Theme.of(context),
-                          padding: const EdgeInsets.only(bottom: 3, top: 3),
-                          subWidget:
-                              Text(transaction.amount?.toString() ?? 'لايوجد'),
-                        ),
+                        
                       ],
                     ),
                   ),
@@ -116,53 +68,15 @@ class TransactionDetailsScreen extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        buildOrderSection("أسم الزبون",
-                            "assets/svg/UserCircle.svg", Theme.of(context),
-                            padding: const EdgeInsets.only(bottom: 3, top: 3),
-                            subWidget:
-                                Text(transaction.senderName ?? 'لايوجد')),
-                        VerticalDivider(
-                          width: 1,
-                          thickness: 1,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        const Gap(AppSpaces.small),
-                        buildOrderSection("رقم الهاتف", "assets/svg/Phone.svg",
-                            Theme.of(context),
-                            padding: const EdgeInsets.only(bottom: 3, top: 3),
-                            subWidget: const Text('لايوجد')),
-                        VerticalDivider(
-                          width: 1,
-                          thickness: 1,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
+                        
                       ],
                     ),
                   ),
-                  IntrinsicHeight(
+                   IntrinsicHeight(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        buildOrderSection(
-                          "المحافظة",
-                          "assets/svg/MapPinLine.svg",
-                          Theme.of(context),
-                          padding: const EdgeInsets.only(bottom: 3, top: 3),
-                          subWidget: const Text("لايوجد"),
-                        ),
-                        VerticalDivider(
-                          width: 1,
-                          thickness: 1,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        const Gap(AppSpaces.small),
-                        buildOrderSection(
-                          "المنطقة",
-                          "assets/svg/MapPinArea.svg",
-                          Theme.of(context),
-                          padding: const EdgeInsets.only(bottom: 3, top: 3),
-                          subWidget: const Text("لايوجد"),
-                        ),
+                       
                       ],
                     ),
                   ),
@@ -181,20 +95,7 @@ class TransactionDetailsScreen extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        buildOrderSection(
-                            "النوع", "assets/svg/Cards.svg", Theme.of(context),
-                            padding: const EdgeInsets.only(bottom: 3, top: 3),
-                            subWidget: const Text("لايوجد")),
-                        VerticalDivider(
-                          width: 1,
-                          thickness: 1,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        const Gap(AppSpaces.small),
-                        buildOrderSection("الحجم", "assets/svg/BoundingBox.svg",
-                            Theme.of(context),
-                            padding: const EdgeInsets.only(bottom: 3, top: 3),
-                            subWidget: const Text("لايوجد")),
+                        
                       ],
                     ),
                   ),

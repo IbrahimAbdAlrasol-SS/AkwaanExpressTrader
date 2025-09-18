@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:Tosell/Features/profile/models/zone.dart';
-import 'package:Tosell/Features/order/widgets/adress_sheet.dart';
 import 'package:Tosell/Features/profile/providers/zone_provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -109,17 +108,7 @@ class _ZonesScreenState extends ConsumerState<ZonesScreen> {
             reverse: true,
             label: "إضافة عنوان جديد",
             onPressed: () {
-              showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return GestureDetector(
-                      child: Container(
-                          child: AdressSheet(
-                        isEditing: false,
-                      )),
-                    );
-                  });
+             
             },
           ),
         ),
@@ -194,18 +183,7 @@ class _ZonesScreenState extends ConsumerState<ZonesScreen> {
               color: const Color(0xFFFFE500),
             ),
             onPressed: () {
-              showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return GestureDetector(
-                      child: Container(
-                          child: AdressSheet(
-                        // address: address,
-                        isEditing: true,
-                      )),
-                    );
-                  });
+             
             },
           ),
           //? Delete Icon

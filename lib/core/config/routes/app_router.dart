@@ -1,7 +1,5 @@
 import 'package:Tosell/Features/navigation.dart';
-import 'package:Tosell/Features/order/orders/models/OrderFilter.dart';
-import 'package:Tosell/Features/order/orders/screens/orders_screen.dart';
-import 'package:Tosell/Features/order/orders/screens/shipment_details_screen.dart';
+
 import 'package:Tosell/Features/profile/models/transaction.dart';
 import 'package:Tosell/Features/profile/screens/changePassword_Screen.dart';
 import 'package:Tosell/Features/profile/screens/delete_account_Screen.dart';
@@ -21,10 +19,7 @@ import 'package:Tosell/Features/auth/register/screens/register_screen.dart';
 // import 'package:Tosell/Features/navigation.dart';
 import 'package:Tosell/Features/notification/screens/notification_screen.dart';
 
-import 'package:Tosell/Features/order/screens/add_order_screen.dart';
-import 'package:Tosell/Features/order/screens/order_completed.dart';
-import 'package:Tosell/Features/order/screens/order_details_screen.dart';
-import 'package:Tosell/Features/order/screens/order_screen.dart';
+
 import 'package:Tosell/Features/settings/screens/theme_settings_screen.dart';
 import 'package:Tosell/Features/settings/widgets/support_record_screen.dart';
 import 'package:Tosell/Features/statistics/screens/statistics_screen.dart';
@@ -68,11 +63,11 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.login,
       builder: (context, state) => const BackgroundWrapper(child: LoginPage()),
     ),
-    GoRoute(
-      path: AppRoutes.orderCompleted,
-      builder: (context, state) =>
-          const BackgroundWrapper(child: OrderCompleted()),
-    ),
+    // GoRoute(
+    //   path: AppRoutes.orderCompleted,
+    //   builder: (context, state) =>
+    //       const BackgroundWrapper(child: OrderCompleted()),
+    // ),
 
     // ✅ Add route for map
     GoRoute(
@@ -88,11 +83,11 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    GoRoute(
-      path: AppRoutes.order,
-      builder: (context, state) =>
-          const BackgroundWrapper(child: OrderScreen()),
-    ),
+    // GoRoute(
+    //   path: AppRoutes.order,
+    //   builder: (context, state) =>
+    //       const BackgroundWrapper(child: OrderScreen()),
+    // ),
     // GoRoute(
     //   path: AppRoutes.notifications,
     //   builder: (context, state) =>
@@ -118,33 +113,33 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
     // TransactionDetaileScreen
-    GoRoute(
-      path: AppRoutes.orderDetails,
-      builder: (context, state) => BackgroundWrapper(
-        child: OrderDetailsScreen(
-          code: state.extra as String,
-        ),
-      ),
-    ),
-    GoRoute(
-      path: AppRoutes.shipmentDetails,
-      builder: (context, state) => BackgroundWrapper(
-        child: ShipmentDetailsScreen(
-          shipmentCode: state.extra as String,
-        ),
-      ),
-    ),
+    // GoRoute(
+    //   path: AppRoutes.orderDetails,
+    //   builder: (context, state) => BackgroundWrapper(
+    //     child: OrderDetailsScreen(
+    //       code: state.extra as String,
+    //     ),
+    //   ),
+    // ),
+    // GoRoute(
+    //   path: AppRoutes.shipmentDetails,
+    //   builder: (context, state) => BackgroundWrapper(
+    //     child: ShipmentDetailsScreen(
+    //       shipmentCode: state.extra as String,
+    //     ),
+    //   ),
+    // ),
 
     GoRoute(
       path: AppRoutes.registerScreen,
       builder: (context, state) =>
           const BackgroundWrapper(child: RegisterScreen()),
     ),
-    GoRoute(
-      path: AppRoutes.addOrder,
-      builder: (context, state) =>
-          const BackgroundWrapper(child: AddOrderScreen()),
-    ),
+    // GoRoute(
+    //   path: AppRoutes.addOrder,
+    //   builder: (context, state) =>
+    //       const BackgroundWrapper(child: AddOrderScreen()),
+    // ),
     GoRoute(
       path: AppRoutes.ForgotPassword,
       builder: (context, state) => const BackgroundWrapper(
@@ -219,17 +214,17 @@ final GoRouter appRouter = GoRouter(
             transitionsBuilder: _slideFromLeftTransition,
           ),
         ),
-        GoRoute(
-          path: AppRoutes.orders,
-          pageBuilder: (context, state) => CustomTransitionPage(
-            key: state.pageKey,
-            child: BackgroundWrapper(
-                child: OrdersScreen(
-              filter: state.extra as OrderFilter?,
-            )),
-            transitionsBuilder: _slideFromLeftTransition,
-          ),
-        ),
+        // GoRoute(
+        //   path: AppRoutes.orders,
+        //   pageBuilder: (context, state) => CustomTransitionPage(
+        //     key: state.pageKey,
+        //     child: BackgroundWrapper(
+        //         child: OrdersScreen(
+        //       filter: state.extra as OrderFilter?,
+        //     )),
+        //     transitionsBuilder: _slideFromLeftTransition,
+        //   ),
+        // ),
         GoRoute(
           path: AppRoutes.myProfile,
           pageBuilder: (context, state) => CustomTransitionPage(
