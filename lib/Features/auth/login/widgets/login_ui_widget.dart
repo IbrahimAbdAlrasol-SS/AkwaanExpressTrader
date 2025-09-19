@@ -70,7 +70,7 @@ class LoginUIWidget extends StatelessWidget {
           children: [
             // ✅ Background ثابت - يصل إلى أعلى الشاشة
             const _BackgroundWidget(),
-            
+
             // ✅ المحتوى القابل للتمرير مع SafeArea
             SafeArea(
               child: _ScrollableContentWidget(
@@ -114,6 +114,7 @@ class _BackgroundWidget extends StatelessWidget {
     );
   }
 }
+
 class _ScrollableContentWidget extends StatelessWidget {
   const _ScrollableContentWidget({
     required this.formKey,
@@ -148,7 +149,7 @@ class _ScrollableContentWidget extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final keyboardHeight = mediaQuery.viewInsets.bottom;
     final screenHeight = mediaQuery.size.height;
-    
+
     // حساب الحجم المناسب بناءً على حالة لوحة المفاتيح
     double calculateChildSize() {
       if (keyboardHeight > 0) {
@@ -159,9 +160,9 @@ class _ScrollableContentWidget extends StatelessWidget {
         return 0.76;
       }
     }
-    
+
     final childSize = calculateChildSize();
-    
+
     return DraggableScrollableSheet(
       initialChildSize: childSize,
       minChildSize: keyboardHeight > 0 ? 0.3 : 0.5,
@@ -265,9 +266,9 @@ class _BottomActionsWidget extends ConsumerWidget {
             isLoading: loginState.isLoading,
             onPressed: () => _handleLogin(context, ref),
           ),
-          
+
           const Gap(16),
-          
+
           // نص "ليس لديك حساب؟ إنشاء حساب"
           const _SignUpPromptWidget(),
         ],
@@ -282,9 +283,7 @@ class _BottomActionsWidget extends ConsumerWidget {
 
       final result = await ref
           .read(authNotifierProvider.notifier)
-          .login(
-              password: password,
-              phoneNumber: phoneNumber);
+          .login(password: password, phoneNumber: phoneNumber);
 
       if (!context.mounted) return;
 

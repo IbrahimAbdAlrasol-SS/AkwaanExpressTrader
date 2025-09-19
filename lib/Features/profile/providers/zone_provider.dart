@@ -16,7 +16,8 @@ class zoneNotifier extends _$zoneNotifier {
     return await governorateService.getAllZones();
   }
 
-  Future<List<ZoneModel.Zone>> getALlZones({required String governorateId}) async {
+  Future<List<ZoneModel.Zone>> getALlZones(
+      {required String governorateId}) async {
     return await zonePriceService.getAllZones(governorateId: governorateId);
   }
 

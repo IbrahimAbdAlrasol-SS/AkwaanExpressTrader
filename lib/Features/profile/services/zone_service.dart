@@ -88,8 +88,8 @@ class ZoneService {
   Future<List<ZoneModel.Zone>> getMyZones() async {
     try {
       // لهذا endpoint نحتاج ZoneObject لأنه يرجع { zone: {...} }
-      final zoneObjectClient =
-          BaseClient<ZoneModel.ZoneObject>(fromJson: (json) => ZoneModel.ZoneObject.fromJson(json));
+      final zoneObjectClient = BaseClient<ZoneModel.ZoneObject>(
+          fromJson: (json) => ZoneModel.ZoneObject.fromJson(json));
 
       var result =
           await zoneObjectClient.get(endpoint: '/merchantzones/merchant');

@@ -165,7 +165,8 @@ class _LoginPageState extends ConsumerState<ForgotPasswordNum> {
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(27),
                                   borderSide: BorderSide(
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     width: 2,
                                   ),
                                 ),
@@ -207,9 +208,11 @@ class _LoginPageState extends ConsumerState<ForgotPasswordNum> {
                               onChanged: (phone) {
                                 HapticFeedback.lightImpact();
                                 // Format phone number with debouncing
-                                Future.delayed(const Duration(milliseconds: 300), () {
+                                Future.delayed(
+                                    const Duration(milliseconds: 300), () {
                                   if (mounted) {
-                                    _phoneOrUsernameController.text = phone.completeNumber;
+                                    _phoneOrUsernameController.text =
+                                        phone.completeNumber;
                                   }
                                 });
                               },

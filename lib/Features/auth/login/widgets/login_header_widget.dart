@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-/// ✅ Widget محسن لرأس صفحة تسجيل الدخول مع تحسين الأداء
 class LoginHeaderWidget extends StatelessWidget {
   const LoginHeaderWidget({super.key});
 
@@ -16,10 +15,10 @@ class LoginHeaderWidget extends StatelessWidget {
       children: [
         // ✅ Background layer
         _BackgroundLayer(),
-        
+
         // ✅ Gradient overlay
         _GradientOverlay(),
-        
+
         // ✅ Content layer
         _ContentLayer(),
       ],
@@ -75,10 +74,10 @@ class _ContentLayer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Gap(30),
-        
+
         // ✅ App bar section
         _AppBarSection(),
-        
+
         // ✅ Logo section
         const _LogoSection(),
       ],

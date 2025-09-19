@@ -13,12 +13,12 @@ class LoginWelcomeWidget extends StatelessWidget {
       children: [
         // ✅ Welcome title
         _WelcomeTitle(),
-        
+
         Gap(8),
-        
+
         // ✅ Welcome description
         _WelcomeDescription(),
-        
+
         Gap(AppSpaces.medium),
       ],
     );
@@ -48,7 +48,8 @@ class _WelcomeTitle extends StatelessWidget {
 class _WelcomeDescription extends StatelessWidget {
   const _WelcomeDescription();
 
-  static const _descriptionText = " أدخل رقم هاتفك وكلمة السر للمتابعة وإدارة وصولاتك بسهولة.";
+  static const _descriptionText =
+      " أدخل رقم هاتفك وكلمة السر للمتابعة وإدارة وصولاتك بسهولة.";
 
   @override
   Widget build(BuildContext context) {

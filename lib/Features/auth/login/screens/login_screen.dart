@@ -14,7 +14,6 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage>
     with TickerProviderStateMixin, LoginStateMixin {
-
   late final ValueNotifier<bool> _obscurePasswordNotifier;
   late final ValueNotifier<String> _countryCodeNotifier;
   late final ValueNotifier<String> _phoneNumberNotifier;
@@ -22,10 +21,10 @@ class _LoginPageState extends ConsumerState<LoginPage>
   @override
   void initState() {
     super.initState();
-        _obscurePasswordNotifier = ValueNotifier(obscurePassword);
+    _obscurePasswordNotifier = ValueNotifier(obscurePassword);
     _countryCodeNotifier = ValueNotifier(selectedCountryCode);
     _phoneNumberNotifier = ValueNotifier(formattedPhoneNumber);
-    
+
     initializeLoginState();
   }
 
@@ -34,7 +33,7 @@ class _LoginPageState extends ConsumerState<LoginPage>
     _obscurePasswordNotifier.dispose();
     _countryCodeNotifier.dispose();
     _phoneNumberNotifier.dispose();
-    
+
     disposeLoginState();
     super.dispose();
   }
@@ -44,7 +43,7 @@ class _LoginPageState extends ConsumerState<LoginPage>
     return Consumer(
       builder: (context, ref, child) {
         final authState = ref.watch(authNotifierProvider);
-        
+
         return authState.when(
           data: (_) => child!,
           loading: () => child!,
@@ -94,9 +93,10 @@ class _LoginPageState extends ConsumerState<LoginPage>
     });
   }
 }
+
 class _ErrorWidget extends StatelessWidget {
   const _ErrorWidget({required this.error});
-  
+
   final String error;
 
   @override
@@ -122,6 +122,7 @@ class _ErrorWidget extends StatelessWidget {
     );
   }
 }
+
 class _LoginUIWrapper extends StatelessWidget {
   const _LoginUIWrapper({
     required this.formKey,

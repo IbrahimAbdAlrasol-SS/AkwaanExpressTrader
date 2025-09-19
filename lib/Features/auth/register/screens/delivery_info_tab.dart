@@ -521,8 +521,6 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
     );
   }
 
-
-
   Widget _buildAddLocationButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -603,23 +601,23 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
         _updateParent();
 
         ScaffoldMessenger.of(context).showSnackBar(
-         const SnackBar(
+          const SnackBar(
             content: Row(
               children: [
-                 Icon(Icons.check_circle, color: Colors.white),
-                 Gap(8),
+                Icon(Icons.check_circle, color: Colors.white),
+                Gap(8),
                 Text('تم حفظ الموقع بنجاح',
-                    style:  TextStyle(fontFamily: "Tajawal")),
+                    style: TextStyle(fontFamily: "Tajawal")),
               ],
             ),
             backgroundColor: Colors.green,
-            duration:  Duration(seconds: 2),
+            duration: Duration(seconds: 2),
           ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-       const SnackBar(
+        const SnackBar(
           content: Text('حدث خطأ في فتح الخريطة',
               style: const TextStyle(fontFamily: "Tajawal")),
           backgroundColor: Colors.red,

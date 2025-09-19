@@ -22,6 +22,7 @@ class GovernorateService {
       rethrow;
     }
   }
+
   Future<List<ZoneModel.Governorate>> searchGovernorates(String query,
       {int page = 1}) async {
     try {
@@ -39,7 +40,9 @@ class GovernorateService {
     } catch (e) {
       rethrow;
     }
-  }  Future<ZoneModel.Governorate?> getGovernorateById(int id) async {
+  }
+
+  Future<ZoneModel.Governorate?> getGovernorateById(int id) async {
     try {
       final result = await baseClient.getById(
         endpoint: '/governorate',

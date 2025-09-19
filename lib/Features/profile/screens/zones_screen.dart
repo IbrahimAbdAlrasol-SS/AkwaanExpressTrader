@@ -107,9 +107,7 @@ class _ZonesScreenState extends ConsumerState<ZonesScreen> {
             ),
             reverse: true,
             label: "إضافة عنوان جديد",
-            onPressed: () {
-             
-            },
+            onPressed: () {},
           ),
         ),
       ),
@@ -182,9 +180,7 @@ class _ZonesScreenState extends ConsumerState<ZonesScreen> {
               "assets/svg/pin.svg",
               color: const Color(0xFFFFE500),
             ),
-            onPressed: () {
-             
-            },
+            onPressed: () {},
           ),
           //? Delete Icon
           IconButton(

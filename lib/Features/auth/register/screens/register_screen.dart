@@ -350,37 +350,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             children: [
               _buildBackgroundSection(),
               _buildBottomSheetSection(),
-              if (_isSubmitting)
-                Container(
-                  color: Colors.black.withOpacity(0.5),
-                  child: const Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CircularProgressIndicator(color: Colors.white),
-                        Gap(16),
-                        Text(
-                          'جاري إنشاء الحساب...',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "Tajawal",
-                          ),
-                        ),
-                        Gap(8),
-                        Text(
-                          'يرجى الانتظار لحظات',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14,
-                            fontFamily: "Tajawal",
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+             
             ],
           ),
         ),
@@ -497,65 +467,64 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
   }
 
   Widget _buildTabBar() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: IgnorePointer(
-            child: TabBar(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _tabController,
-                indicator: const BoxDecoration(),
-                labelPadding: EdgeInsets.zero,
-                dividerColor: Colors.transparent,
-              tabs: List.generate(2, (i) {
-                final bool isSelected = _currentIndex == i;
-                final bool isCompleted = _currentIndex > i;
-                final bool isDisabled = i == 1 && _currentIndex == 0 && !_canNavigateToNextTab();
-                final String label =
-                    i == 0 ? "معلومات الحساب" : "معلومات التوصيل";
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        child: IgnorePointer(
+          child: TabBar(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: _tabController,
+            indicator: const BoxDecoration(),
+            labelPadding: EdgeInsets.zero,
+            dividerColor: Colors.transparent,
+            tabs: List.generate(2, (i) {
+              final bool isSelected = _currentIndex == i;
+              final bool isCompleted = _currentIndex > i;
+              final bool isDisabled =
+                  i == 1 && _currentIndex == 0 && !_canNavigateToNextTab();
+              final String label =
+                  i == 0 ? "معلومات الحساب" : "معلومات التوصيل";
 
-                return Tab(
-                  child: Opacity(
-                    opacity: isDisabled ? 0.5 : 1.0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          height: 8,
-                          width: 160.w,
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? Theme.of(context).colorScheme.primary
-                                : isCompleted
-                                    ? const Color(0xff8CD98C)
-                                    : const Color(0xffE1E7EA),
-                            borderRadius: BorderRadius.circular(3),
-                          ),
+              return Tab(
+                child: Opacity(
+                  opacity: isDisabled ? 0.5 : 1.0,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 8,
+                        width: 160.w,
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.primary
+                              : isCompleted
+                                  ? const Color(0xff8CD98C)
+                                  : const Color(0xffE1E7EA),
+                          borderRadius: BorderRadius.circular(3),
                         ),
-                        const Gap(5),
-                        Text(
-                          label,
-                          style: TextStyle(
-                            color: isSelected
-                                ? Theme.of(context).colorScheme.primary
-                                : isCompleted
-                                    ? const Color(0xff8CD98C)
-                                    : Theme.of(context).colorScheme.secondary,
-                            fontWeight:
-                                isSelected ? FontWeight.bold : FontWeight.normal,
-                          ),
+                      ),
+                      const Gap(5),
+                      Text(
+                        label,
+                        style: TextStyle(
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.primary
+                              : isCompleted
+                                  ? const Color(0xff8CD98C)
+                                  : Theme.of(context).colorScheme.secondary,
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                );
-              }),
-            ),
+                ),
+              );
+            }),
           ),
         ),
-        const Gap(10),
-    
+      ),
+      const Gap(10),
     ]);
   }
 
@@ -578,7 +547,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
 
   Widget _buildFirstTabButtons() {
     final bool canProceed = _canNavigateToNextTab();
-    
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -590,7 +559,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             child: FilledButton(
               onPressed: canProceed ? _goToNextTab : null,
               style: FilledButton.styleFrom(
-                backgroundColor: canProceed 
+                backgroundColor: canProceed
                     ? Theme.of(context).colorScheme.primary
                     : Colors.grey[400],
               ),

@@ -198,8 +198,6 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
     }
   }
 
-
-
   // دالة للتحقق من قوة كلمة المرور
   String? _validatePasswordStrength(String? password) {
     if (password == null || password.isEmpty) {
@@ -709,7 +707,6 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
 
                   // Save country code
                   _saveCountryCode(phone.countryCode);
-
 
                   _saveCurrentData();
                 },
