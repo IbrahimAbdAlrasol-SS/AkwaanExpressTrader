@@ -10,7 +10,6 @@ class AuthService {
   AuthService()
       : baseClient = BaseClient<User>(fromJson: (json) => User.fromJson(json));
 
-  /// دالة تسجيل الدخول - تعمل بشكل جيد (لا تغيير)
   Future<(User? data, String? error)> login(
       {String? phoneNumber, required String password}) async {
     try {
