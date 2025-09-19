@@ -4,7 +4,6 @@ import 'package:Tosell/Features/home/presentation/widgets/invoice_history_column
 import 'package:Tosell/Features/home/presentation/widgets/withdraw_balance_column_widget.dart';
 import 'package:flutter/material.dart';
 
-
 class ActionCounterWidget extends StatelessWidget {
   final VoidCallback? onAddReceiptTap;
   final VoidCallback? onWithdrawBalanceTap;

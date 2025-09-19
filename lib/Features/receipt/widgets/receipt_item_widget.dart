@@ -92,12 +92,11 @@ class ReceiptItemWidget extends StatelessWidget {
                           Text(
                             receipt.location,
                             style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize:12 ,
-                             // height:1,
-                            //  letterSpacing: 0,
-                            wordSpacing:1
-                            ),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                                // height:1,
+                                //  letterSpacing: 0,
+                                wordSpacing: 1),
                             textAlign: TextAlign.left,
                           ),
                         ],

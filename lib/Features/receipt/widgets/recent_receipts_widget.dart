@@ -18,7 +18,7 @@ class RecentReceiptsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ترتيب الوصولات حسب آخر تحديث
+
     final sortedReceipts = List<ReceiptUpdateModel>.from(receipts)
       ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
 

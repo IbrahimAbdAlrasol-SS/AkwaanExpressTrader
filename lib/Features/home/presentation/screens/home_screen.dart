@@ -37,90 +37,131 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     var homeState = ref.watch(homeNotifierProvider);
     var userState = ref.watch(profileNotifierProvider);
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [0.0, 0.35, 0.35, 1.0],
-            colors: [
-              Color(0xFF134AB9), // لون الجزء العلوي
-              Color(0xFF1A66FF),
-              Colors.white, // بداية الجزء السفلي الأبيض
-              Colors.white, // نهاية الجزء السفلي الأبيض
-            ],
-          ),
+      backgroundColor: Colors.white,
+      body: homeState.when(
+        data: (data) =>
+            _buildUi(context, user: userState.value ?? User(), home: data),
+        error: (error, _) => Center(
+          child: Text(error.toString()),
         ),
-        child: homeState.when(
-          data: (data) =>
-              _buildUi(context, user: userState.value ?? User(), home: data),
-          error: (error, _) => Center(
-            child: Text(error.toString()),
-          ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
   }
 
   Widget _buildUi(BuildContext context,
       {required User user, required Home home}) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const Gap(40),
-          HomeHeaderWidget(
+    return CustomScrollView(
+      slivers: [
+        // SliverAppBar مع HomeHeaderWidget ثابت في الأعلى
+
+        SliverAppBar(
+          expandedHeight: 200.0,
+          floating: false,
+          pinned: true,
+          elevation: 0,
+          backgroundColor: const Color(0xFF134AB9),
+          title: HomeHeaderWidget(
             user: user,
             home: home,
           ),
-          Gap(40),
-          const FinancialSummaryWidget(
-            receivablesAmount: '90,000',
-            debtsAmount: '50,000',
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF134AB9),
+                    Color(0xFF1A66FF),
+                  ],
+                ),
+              ),
+              child: const SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    children: [
+                      const Gap(100), // مساحة للـ HomeHeaderWidget الثابت
+                      const FinancialSummaryWidget(
+                        receivablesAmount: '90,000',
+                        debtsAmount: '50,000',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
-          const Gap(40),
-          ActionCounterWidget(
-            onAddReceiptTap: () {
-              print('تم الضغط على إضافة وصل');
-            },
-            onWithdrawBalanceTap: () {
-              print('تم الضغط على سحب رصيد');
-            },
-            onInvoiceHistoryTap: () {
-              print('تم الضغط على سجل الفواتير');
-            },
-          ),
-          const Gap(20),
-          const ComprehensiveStatisticsWidget(),
-          const Gap(20),
-          RecentReceiptsWidget(
-            receipts: _getSampleReceipts(),
-            onReceiptTap: (receipt) {
-              print('تم الضغط على الوصل: ${receipt.code}');
-              // يمكن إضافة التنقل إلى صفحة تفاصيل الوصل هنا
-            },
-            onViewMore: () {
-              print('تم الضغط على عرض المزيد');
-            },
-          ),
-          const Gap(20),
-          RecentNotificationsWidget(
-            notifications: _getSampleNotifications(),
-            onNotificationTap: (notification) {
-              print('تم الضغط على الإشعار: ${notification.title}');
-              // يمكن إضافة التنقل إلى صفحة تفاصيل الإشعار هنا
-            },
-            onViewMore: () {
-              print('تم الضغط على عرض المزيد من الإشعارات');
-            },
-          ),
-           const Gap(20),
+        ),
 
+        // ActionCounterWidget في المنطقة الانتقالية
+        SliverToBoxAdapter(
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF1A66FF), // لون أزرق عميق وقوي
+                  Colors.white, // انتقال للأبيض
+                ],
+                stops: [
+                  0.15,
+                  0.15
+                ], // تقليل منطقة الانتقال لجعل الأزرق أكثر وضوحاً
+              ),
+            ),
+            child: ActionCounterWidget(
+              onAddReceiptTap: () {
+                print('تم الضغط على إضافة وصل');
+              },
+              onWithdrawBalanceTap: () {
+                print('تم الضغط على سحب رصيد');
+              },
+              onInvoiceHistoryTap: () {
+                print('تم الضغط على سجل الفواتير');
+              },
+            ),
+          ),
+        ),
 
-          
-        ],
-      ),
+        // باقي محتوى الصفحة القابل للتمرير
+        SliverToBoxAdapter(
+          child: Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                const Gap(20),
+                const ComprehensiveStatisticsWidget(),
+                const Gap(20),
+                RecentReceiptsWidget(
+                  receipts: _getSampleReceipts(),
+                  onReceiptTap: (receipt) {
+                    print('تم الضغط على الوصل: ${receipt.code}');
+                    // يمكن إضافة التنقل إلى صفحة تفاصيل الوصل هنا
+                  },
+                  onViewMore: () {
+                    print('تم الضغط على عرض المزيد');
+                  },
+                ),
+                const Gap(20),
+                RecentNotificationsWidget(
+                  notifications: _getSampleNotifications(),
+                  onNotificationTap: (notification) {
+                    print('تم الضغط على الإشعار: ${notification.title}');
+                    // يمكن إضافة التنقل إلى صفحة تفاصيل الإشعار هنا
+                  },
+                  onViewMore: () {
+                    print('تم الضغط على عرض المزيد من الإشعارات');
+                  },
+                ),
+                const Gap(40),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -158,20 +199,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<ReceiptUpdateModel> _getSampleReceipts() {
     return [
       ReceiptUpdateModel(
+        deliveryTime: DateTime.now().subtract(const Duration(minutes: 30)),
         id: '1',
         code: '#002940',
         status: 'في المخزن',
         location: 'بغداد - الكرادة',
         updatedAt: DateTime.now().subtract(const Duration(minutes: 30)),
+        amount: 10000, // مبلغ الاستحقاق
       ),
       ReceiptUpdateModel(
+        deliveryTime: DateTime.now().subtract(const Duration(hours: 2)),
+       //  formattedDateTime: '2023-08-25 10:30:00', // الوقت بصيغة منسقة
         id: '2',
         code: '#002941',
         status: 'قيد الاستحصال',
         location: 'بغداد - الجادرية',
         updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
+        amount: 15000, // مبلغ الاستحقاق
       ),
-     
     ];
   }
 
@@ -189,11 +234,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         id: '2',
         type: NotificationType.delivery,
         title: 'تم التسليم',
-        description: 'تم تسليم الطلب #002948 بنجاح إلى العميل في بغداد - الكرادة',
+        description:
+            'تم تسليم الطلب #002948 بنجاح إلى العميل في بغداد - الكرادة',
         createdAt: DateTime.now().subtract(const Duration(hours: 1)),
         isRead: false,
       ),
-     
     ];
   }
 }

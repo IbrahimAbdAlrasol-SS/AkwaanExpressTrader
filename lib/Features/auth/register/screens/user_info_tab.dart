@@ -198,29 +198,7 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
     }
   }
 
-  // دالة لتنسيق الأرقام العراقية
-  String _formatIraqiPhoneNumber(String phoneNumber) {
-    // إزالة المسافات والرموز الإضافية
-    String cleanNumber = phoneNumber.replaceAll(RegExp(r'[^0-9]'), '');
 
-    // التحقق من الأرقام العراقية
-    if (cleanNumber.startsWith('964')) {
-      cleanNumber = cleanNumber.substring(3);
-    }
-
-    if (cleanNumber.startsWith('0')) {
-      cleanNumber = cleanNumber.substring(1);
-    }
-
-    // تنسيق الرقم
-    if (cleanNumber.length >= 10) {
-      return '${cleanNumber.substring(0, 3)} ${cleanNumber.substring(3, 6)} ${cleanNumber.substring(6)}';
-    } else if (cleanNumber.length >= 7) {
-      return '${cleanNumber.substring(0, 3)} ${cleanNumber.substring(3, 6)} ${cleanNumber.substring(6)}';
-    }
-
-    return cleanNumber;
-  }
 
   // دالة للتحقق من قوة كلمة المرور
   String? _validatePasswordStrength(String? password) {
@@ -732,18 +710,7 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
                   // Save country code
                   _saveCountryCode(phone.countryCode);
 
-                  // Format Iraqi numbers
-                  if (phone.countryISOCode == 'IQ') {
-                    final formatted = _formatIraqiPhoneNumber(phone.number);
-                    if (formatted != phone.number) {
-                      _phoneController.value = _phoneController.value.copyWith(
-                        text: formatted,
-                        selection: TextSelection.collapsed(
-                          offset: formatted.length,
-                        ),
-                      );
-                    }
-                  }
+
                   _saveCurrentData();
                 },
                 onCountryChanged: (country) {
@@ -753,22 +720,7 @@ class _UserInfoTabState extends ConsumerState<UserInfoTab>
                   });
                   _saveCountryCode('+${country.dialCode}');
                 },
-                validator: (phone) {
-                  if (phone == null || phone.number.isEmpty) {
-                    return 'رقم الهاتف مطلوب';
-                  }
-
-                  // Validate Iraqi phone numbers specifically
-                  if (phone.countryISOCode == 'IQ') {
-                    final cleanNumber =
-                        phone.number.replaceAll(RegExp(r'[^0-9]'), '');
-                    if (!RegExp(r'^7[0-9]{9}$').hasMatch(cleanNumber)) {
-                      return 'رقم الهاتف العراقي غير صحيح';
-                    }
-                  }
-
-                  return null;
-                },
+                validator: null,
                 onSubmitted: (_) => _passwordFocus.requestFocus(),
               ),
             ),

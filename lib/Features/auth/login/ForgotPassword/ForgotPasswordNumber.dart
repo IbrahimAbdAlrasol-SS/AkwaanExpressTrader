@@ -203,12 +203,7 @@ class _LoginPageState extends ConsumerState<ForgotPasswordNum> {
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
                               ],
-                              validator: (phone) {
-                                if (phone == null || phone.number.isEmpty) {
-                                  return 'يرجى إدخال رقم الهاتف';
-                                }
-                                return null;
-                              },
+                              validator: null,
                               onChanged: (phone) {
                                 HapticFeedback.lightImpact();
                                 // Format phone number with debouncing

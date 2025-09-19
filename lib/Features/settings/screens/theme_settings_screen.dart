@@ -13,7 +13,6 @@ class ThemeSettingsScreen extends ConsumerWidget {
     final currentTheme = ref.watch(themeNotifierProvider);
     final themeNotifier = ref.read(themeNotifierProvider.notifier);
     final theme = Theme.of(context);
-
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: Padding(

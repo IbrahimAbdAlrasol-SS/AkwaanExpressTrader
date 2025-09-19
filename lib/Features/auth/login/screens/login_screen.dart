@@ -139,40 +139,9 @@ class _LoginPageState extends ConsumerState<LoginPage>
     }
   }
   
-  /// Format Iraqi phone number as 07 xxx xxx xx
-  String _formatIraqiPhoneNumber(String phoneNumber) {
-    // Remove all non-digit characters
-    final digitsOnly = phoneNumber.replaceAll(RegExp(r'\D'), '');
-    
-    if (digitsOnly.length >= 11 && digitsOnly.startsWith('964')) {
-      // Remove country code 964
-      final localNumber = digitsOnly.substring(3);
-      if (localNumber.length >= 10) {
-        return '${localNumber.substring(0, 2)} ${localNumber.substring(2, 5)} ${localNumber.substring(5, 8)} ${localNumber.substring(8, 10)}';
-      }
-    } else if (digitsOnly.length >= 10 && digitsOnly.startsWith('07')) {
-      return '${digitsOnly.substring(0, 2)} ${digitsOnly.substring(2, 5)} ${digitsOnly.substring(5, 8)} ${digitsOnly.substring(8, 10)}';
-    }
-    
-    return phoneNumber;
-  }
+
   
-  /// Validate Iraqi phone number
-  bool _isValidIraqiPhoneNumber(String phoneNumber) {
-    final digitsOnly = phoneNumber.replaceAll(RegExp(r'\D'), '');
-    
-    // Check for Iraqi format: 07xxxxxxxx (10 digits starting with 07)
-    if (digitsOnly.length == 10 && digitsOnly.startsWith('07')) {
-      return true;
-    }
-    
-    // Check for international format: 96407xxxxxxxx
-    if (digitsOnly.length == 13 && digitsOnly.startsWith('96407')) {
-      return true;
-    }
-    
-    return false;
-  }
+
   
   /// Validate password strength
   String? _validatePasswordStrength(String? password) {
@@ -430,18 +399,7 @@ class _LoginPageState extends ConsumerState<LoginPage>
                                         // Save country code
                                         _saveCountryCode(phone.countryCode);
                                         
-                                        // Format Iraqi numbers
-                                        if (phone.countryISOCode == 'IQ') {
-                                          final formatted = _formatIraqiPhoneNumber(phone.number);
-                                          if (formatted != phone.number) {
-                                            _phoneController.value = _phoneController.value.copyWith(
-                                              text: formatted,
-                                              selection: TextSelection.collapsed(
-                                                offset: formatted.length,
-                                              ),
-                                            );
-                                          }
-                                        }
+
                                       },
                                       onCountryChanged: (country) {
                                         setState(() {
@@ -449,20 +407,7 @@ class _LoginPageState extends ConsumerState<LoginPage>
                                         });
                                         _saveCountryCode('+${country.dialCode}');
                                       },
-                                      validator: (phone) {
-                                        if (phone == null || phone.number.isEmpty) {
-                                          return 'رقم الهاتف مطلوب';
-                                        }
-                                        
-                                        // Validate Iraqi phone numbers specifically
-                                        if (phone.countryISOCode == 'IQ') {
-                                          if (!_isValidIraqiPhoneNumber(phone.number)) {
-                                            return 'رقم الهاتف العراقي غير صحيح';
-                                          }
-                                        }
-                                        
-                                        return null;
-                                      },
+                                      validator: null,
                                     ),
                                   ),
                                   const Gap(AppSpaces.medium),

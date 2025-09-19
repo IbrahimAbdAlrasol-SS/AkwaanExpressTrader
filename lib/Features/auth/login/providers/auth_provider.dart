@@ -59,12 +59,7 @@ class authNotifier extends _$authNotifier {
         return (null, errorMsg);
       }
 
-      if (phoneNumber.trim().isEmpty) {
-        const errorMsg = 'رقم الهاتف مطلوب';
-        state = const AsyncValue.data(null);
-        print('❌ $errorMsg');
-        return (null, errorMsg);
-      }
+
 
       if (password.isEmpty) {
         const errorMsg = 'كلمة المرور مطلوبة';

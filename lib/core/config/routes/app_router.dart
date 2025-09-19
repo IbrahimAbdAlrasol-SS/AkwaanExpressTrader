@@ -18,7 +18,7 @@ import 'package:Tosell/Features/auth/register/screens/map_selection_screen.dart'
 import 'package:Tosell/Features/auth/register/screens/register_screen.dart';
 // import 'package:Tosell/Features/navigation.dart';
 import 'package:Tosell/Features/notification/screens/notification_screen.dart';
-
+import 'package:Tosell/Features/receipt/screens/receipt_screen.dart';
 
 import 'package:Tosell/Features/settings/screens/theme_settings_screen.dart';
 import 'package:Tosell/Features/settings/widgets/support_record_screen.dart';
@@ -214,6 +214,11 @@ final GoRouter appRouter = GoRouter(
             transitionsBuilder: _slideFromLeftTransition,
           ),
         ),
+        GoRoute(
+          path: AppRoutes.receipts,
+          builder: (context, state) =>
+              const BackgroundWrapper(child: ReceiptScreen()),
+        ),
         // GoRoute(
         //   path: AppRoutes.orders,
         //   pageBuilder: (context, state) => CustomTransitionPage(
@@ -305,4 +310,5 @@ class AppRoutes {
       '/ForgotPasswordNumberNamePass';
   static const String shipmentOrders = '/shipment-orders';
   static const String themeSettings = '/theme-settings';
+  static const String receipts = '/receipts';
 }

@@ -13,7 +13,6 @@ import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 class NavigationPage extends ConsumerStatefulWidget {
   final Widget child;
   const NavigationPage({super.key, required this.child});
-
   @override
   ConsumerState<NavigationPage> createState() => _NavigationPageState();
 }
@@ -23,7 +22,7 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
 
   final List<String> locations = [
     AppRoutes.home,
-    AppRoutes.orders,
+    AppRoutes.receipts,
     AppRoutes.addOrder,
     AppRoutes.statistics,
     AppRoutes.myProfile,
@@ -47,11 +46,9 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
 
   void onItemTapped(int index) {
     if (_selectedIndex == index) return;
-
     setState(() {
       _selectedIndex = index;
     });
-
     context.go(locations[index]);
   }
 
@@ -65,9 +62,7 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
             body: Center(child: CircularProgressIndicator()),
           );
         }
-
         final user = snapshot.data;
-
         return Scaffold(
           body: BackgroundWrapper(child: widget.child),
           bottomNavigationBar: BottomNavigationBar(
@@ -83,7 +78,8 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
               _buildNavItem("assets/svg/navigation_home.svg", "الرئيسية", 0),
               _buildNavItem("assets/svg/Receipt.svg", "الوصولات", 1),
               _buildNavItem("assets/svg/navigation_add.svg", "", 2),
-              _buildNavItem("assets/svg/navigation_statstic.svg", "الإحصائيات", 3),
+              _buildNavItem(
+                  "assets/svg/navigation_statstic.svg", "الإحصائيات", 3),
               _buildNavItem("assets/svg/navigation_profile.svg", "حسابي", 4),
             ],
           ),
@@ -91,10 +87,8 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
       },
     );
   }
-
   BottomNavigationBarItem _buildNavItem(String icon, String label, int index) {
     final bool isSelected = _selectedIndex == index;
-
     return BottomNavigationBarItem(
       icon: Stack(
         alignment: Alignment.center,
@@ -117,7 +111,8 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
             colorFilter: isSelected
                 ? const ColorFilter.mode(Colors.white, BlendMode.srcIn)
                 : index == 2 || index == 5
-                    ? const ColorFilter.mode(Color.fromARGB(255, 12, 76, 110), BlendMode.srcIn)
+                    ? const ColorFilter.mode(
+                        Color.fromARGB(255, 12, 76, 110), BlendMode.srcIn)
                     : ColorFilter.mode(
                         Theme.of(context).colorScheme.secondary,
                         BlendMode.srcIn,
@@ -128,7 +123,6 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
       label: label,
     );
   }
-
   Future<String?> scanBarcode(BuildContext context) async {
     String? res = await SimpleBarcodeScanner.scanBarcode(
       context,
@@ -145,4 +139,3 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
     return res;
   }
 }
-

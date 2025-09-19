@@ -188,19 +188,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                             inputFormatters: [
                               FilteringTextInputFormatter.digitsOnly,
                             ],
-                            validator: (phone) {
-                              if (phone == null || phone.number.isEmpty) {
-                                return 'يرجى إدخال رقم الهاتف';
-                              }
-                              // Iraqi phone number validation
-                              if (phone.countryCode == '+964') {
-                                if (!RegExp(r'^(77|78|79|75|73)[0-9]{8}$')
-                                    .hasMatch(phone.number)) {
-                                  return 'رقم هاتف عراقي غير صالح';
-                                }
-                              }
-                              return null;
-                            },
+                            validator: null,
                             onChanged: (phone) {
                               HapticFeedback.lightImpact();
                               // Format phone number with debouncing

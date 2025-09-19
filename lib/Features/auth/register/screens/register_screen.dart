@@ -188,14 +188,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
       _tabController.animateTo(0);
       return false;
     }
-    if (phoneNumber?.isEmpty ?? true) {
-      GlobalToast.show(
-          context: context,
-          message: 'رقم الهاتف مطلوب',
-          backgroundColor: Colors.red);
-      _tabController.animateTo(0);
-      return false;
-    }
+
     if (password?.isEmpty ?? true) {
       GlobalToast.show(
           context: context,
