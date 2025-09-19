@@ -1,13 +1,13 @@
-import 'package:Tosell/Features/profile/models/zone.dart';
+import 'package:Tosell/Features/profile/models/zone.dart' as ZoneModel;
 import 'package:Tosell/core/api/client/BaseClient.dart';
 
 class GovernorateService {
-  final BaseClient<Governorate> baseClient;
+  final BaseClient<ZoneModel.Governorate> baseClient;
 
   GovernorateService()
-      : baseClient = BaseClient<Governorate>(
-            fromJson: (json) => Governorate.fromJson(json));
-  Future<List<Governorate>> getAllZones(
+      : baseClient = BaseClient<ZoneModel.Governorate>(
+            fromJson: (json) => ZoneModel.Governorate.fromJson(json));
+  Future<List<ZoneModel.Governorate>> getAllZones(
       {Map<String, dynamic>? queryParams, int page = 1}) async {
     try {
       var result = await baseClient.getAll(
@@ -22,7 +22,7 @@ class GovernorateService {
       rethrow;
     }
   }
-  Future<List<Governorate>> searchGovernorates(String query,
+  Future<List<ZoneModel.Governorate>> searchGovernorates(String query,
       {int page = 1}) async {
     try {
       if (query.trim().isEmpty) {
@@ -39,7 +39,7 @@ class GovernorateService {
     } catch (e) {
       rethrow;
     }
-  }  Future<Governorate?> getGovernorateById(int id) async {
+  }  Future<ZoneModel.Governorate?> getGovernorateById(int id) async {
     try {
       final result = await baseClient.getById(
         endpoint: '/governorate',

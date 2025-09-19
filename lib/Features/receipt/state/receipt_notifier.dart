@@ -101,7 +101,7 @@ class ReceiptNotifier extends StateNotifier<ReceiptState> {
         code: 'HIL010',
         updatedAt: DateTime.now(),
         amount: 310000.0, // 310 ألف دينار عراقي
-        deliveryTime: DateTime(2025, 1, 10, 8, 45), 
+        deliveryTime: DateTime(2025, 1, 10, 8, 45), // 10/01/2025, 8:45ص
       ),
       ReceiptUpdateModel(
         id: '11',
@@ -110,7 +110,7 @@ class ReceiptNotifier extends StateNotifier<ReceiptState> {
         code: 'DHK011',
         updatedAt: DateTime.now(),
         amount: 205000.0, // 205 ألف دينار عراقي
-        deliveryTime: DateTime(2025, 1, 22, 14, 15),
+        deliveryTime: DateTime(2025, 1, 22, 14, 15), // 22/01/2025, 2:15م
       ),
       ReceiptUpdateModel(
         id: '12',
@@ -131,13 +131,12 @@ class ReceiptNotifier extends StateNotifier<ReceiptState> {
   void updateSearchQuery(String query) {
     state = state.copyWith(searchQuery: query);
   }
-
   void addReceipt(ReceiptUpdateModel receipt) {
     state = state.copyWith(
       receipts: [...state.receipts, receipt],
     );
   }
-
+  /// تحديث وصولة موجودة
   void updateReceipt(ReceiptUpdateModel updatedReceipt) {
     final updatedReceipts = state.receipts.map<ReceiptUpdateModel>((receipt) {
       return receipt.id == updatedReceipt.id ? updatedReceipt : receipt;
@@ -146,7 +145,7 @@ class ReceiptNotifier extends StateNotifier<ReceiptState> {
     state = state.copyWith(receipts: updatedReceipts);
   }
 
-
+  /// حذف وصولة
   void deleteReceipt(String receiptId) {
     final updatedReceipts = state.receipts
         .where((receipt) => receipt.id != receiptId)
@@ -155,6 +154,7 @@ class ReceiptNotifier extends StateNotifier<ReceiptState> {
     state = state.copyWith(receipts: updatedReceipts);
   }
 
+  /// تحديث حالة الوصولة
   void updateReceiptStatus(String receiptId, String newStatus) {
     final updatedReceipts = state.receipts.map<ReceiptUpdateModel>((receipt) {
       if (receipt.id == receiptId) {

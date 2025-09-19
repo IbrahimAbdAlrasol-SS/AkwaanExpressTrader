@@ -1,5 +1,5 @@
 import 'package:Tosell/Features/auth/login/providers/auth_provider.dart';
-import 'package:Tosell/Features/profile/models/zone.dart';
+import 'package:Tosell/Features/profile/models/zone.dart' as ZoneModel;
 import 'package:Tosell/core/config/routes/app_router.dart';
 import 'package:Tosell/core/utils/extensions/GlobalToast.dart';
 import 'package:Tosell/core/utils/extensions/extensions.dart';
@@ -41,7 +41,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
   String? brandImg;
   String? expectedOrders;
 
-  List<Zone> selectedZones = [];
+  List<ZoneModel.Zone> selectedZones = [];
   double? latitude;
   double? longitude;
   String? nearestLandmark;
@@ -150,7 +150,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
 
   /// ✅ تحديث المناطق والإحداثيات من DeliveryInfoTab
   void _updateZonesWithLocation({
-    required List<Zone> zones,
+    required List<ZoneModel.Zone> zones,
     double? latitude,
     double? longitude,
     String? nearestLandmark,

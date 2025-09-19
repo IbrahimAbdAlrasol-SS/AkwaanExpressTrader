@@ -1,4 +1,4 @@
-import 'package:Tosell/Features/profile/models/zone.dart';
+import 'package:Tosell/Features/profile/models/zone.dart' as ZoneModel;
 import 'package:Tosell/Features/profile/services/governorate_service.dart';
 import 'package:Tosell/Features/profile/services/zone_price_service.dart';
 import 'package:Tosell/Features/profile/services/zone_service.dart';
@@ -12,16 +12,16 @@ class zoneNotifier extends _$zoneNotifier {
   ZonePriceService zonePriceService = ZonePriceService();
   GovernorateService governorateService = GovernorateService();
 
-  Future<List<Governorate>> getAllGovernorate() async {
+  Future<List<ZoneModel.Governorate>> getAllGovernorate() async {
     return await governorateService.getAllZones();
   }
 
-  Future<List<Zone>> getALlZones({required String governorateId}) async {
+  Future<List<ZoneModel.Zone>> getALlZones({required String governorateId}) async {
     return await zonePriceService.getAllZones(governorateId: governorateId);
   }
 
   @override
-  FutureOr<List<Zone>> build() async {
+  FutureOr<List<ZoneModel.Zone>> build() async {
     return await zoneService.getMyZones();
   }
 }

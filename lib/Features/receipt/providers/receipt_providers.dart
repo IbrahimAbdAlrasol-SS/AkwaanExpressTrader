@@ -9,7 +9,7 @@ final receiptProvider = StateNotifierProvider<ReceiptNotifier, ReceiptState>(
 final activeReceiptsProvider = Provider<List<ReceiptUpdateModel>>((ref) {
   final state = ref.watch(receiptProvider);
   return state.filteredActiveReceipts;
-  });
+});
 final completedReceiptsProvider = Provider<List<ReceiptUpdateModel>>((ref) {
   final state = ref.watch(receiptProvider);
   return state.filteredCompletedReceipts;
@@ -45,15 +45,15 @@ final receiptStatsProvider = Provider<Map<String, dynamic>>((ref) {
   final completedReceipts = state.completedReceipts;
   final returnedReceipts = state.returnedReceipts;
   final totalAmount = state.receipts.fold<double>(
-    0.0, 
+    0.0,
     (sum, receipt) => sum + receipt.amount,
   );
   final activeAmount = activeReceipts.fold<double>(
-    0.0, 
+    0.0,
     (sum, receipt) => sum + receipt.amount,
   );
   final completedAmount = completedReceipts.fold<double>(
-    0.0, 
+    0.0,
     (sum, receipt) => sum + receipt.amount,
   );
   return {

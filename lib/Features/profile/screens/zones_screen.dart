@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:Tosell/Features/profile/models/zone.dart';
+import 'package:Tosell/Features/profile/models/zone.dart' as ZoneModel;
 import 'package:Tosell/Features/profile/providers/zone_provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -116,7 +116,7 @@ class _ZonesScreenState extends ConsumerState<ZonesScreen> {
     );
   }
 
-  ListView _buildUi(List<Zone> zones) {
+  ListView _buildUi(List<ZoneModel.Zone> zones) {
     return ListView.builder(
       shrinkWrap: true,
       // تحسين سلاسة التحكم - استخدام BouncingScrollPhysics بدلاً من NeverScrollableScrollPhysics
@@ -129,7 +129,7 @@ class _ZonesScreenState extends ConsumerState<ZonesScreen> {
     );
   }
 
-  Widget buildZoneCart(Zone zone, ThemeData theme) {
+  Widget buildZoneCart(ZoneModel.Zone zone, ThemeData theme) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20), // تحسين المسافة بين العناصر
       padding: const EdgeInsets.symmetric(

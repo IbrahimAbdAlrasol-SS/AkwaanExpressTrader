@@ -1,4 +1,4 @@
-import 'package:Tosell/Features/profile/models/zone.dart';
+import 'package:Tosell/Features/profile/models/zone.dart' as ZoneModel;
 import 'package:Tosell/core/config/routes/app_router.dart';
 import 'package:Tosell/core/utils/extensions/extensions.dart';
 import 'package:Tosell/core/widgets/inputs/CustomTextFormField.dart';
@@ -15,8 +15,8 @@ import '../../../profile/services/governorate_service.dart';
 import '../../../profile/services/zone_service.dart';
 
 class ZoneLocationInfo {
-  Governorate? selectedGovernorate;
-  Zone? selectedZone;
+  ZoneModel.Governorate? selectedGovernorate;
+  ZoneModel.Zone? selectedZone;
   String nearestLandmark;
   double? latitude;
   double? longitude;
@@ -32,8 +32,8 @@ class ZoneLocationInfo {
   });
 
   ZoneLocationInfo copyWith({
-    Governorate? selectedGovernorate,
-    Zone? selectedZone,
+    ZoneModel.Governorate? selectedGovernorate,
+    ZoneModel.Zone? selectedZone,
     String? nearestLandmark,
     double? latitude,
     double? longitude,
@@ -49,12 +49,12 @@ class ZoneLocationInfo {
     );
   }
 
-  Zone? toZone() {
+  ZoneModel.Zone? toZone() {
     if (selectedZone == null) {
       return null;
     }
 
-    return Zone(
+    return ZoneModel.Zone(
       id: selectedZone!.id,
       name: selectedZone!.name,
       type: selectedZone!.type,
@@ -71,12 +71,12 @@ class ZoneLocationInfo {
 
 class DeliveryInfoTab extends ConsumerStatefulWidget {
   final Function({
-    required List<Zone> zones,
+    required List<ZoneModel.Zone> zones,
     double? latitude,
     double? longitude,
     String? nearestLandmark,
   }) onZonesChangedWithLocation;
-  final List<Zone> initialZones;
+  final List<ZoneModel.Zone> initialZones;
 
   const DeliveryInfoTab({
     super.key,
@@ -113,7 +113,7 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
         .where((zone) => zone.selectedZone != null)
         .map((zone) => zone.toZone())
         .where((zone) => zone != null)
-        .cast<Zone>()
+        .cast<ZoneModel.Zone>()
         .toList();
 
     final firstValidZone = zones.firstWhere((zone) => zone.isValid,
@@ -221,7 +221,7 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
   }
 
   Widget _buildGovernorateDropdown(int index, ZoneLocationInfo zoneInfo) {
-    return RegistrationSearchDropDown<Governorate>(
+    return RegistrationSearchDropDown<ZoneModel.Governorate>(
       label: "المحافظة",
       hint: "ابحث عن المحافظة... مثال: 'بغداد'",
       selectedValue: zoneInfo.selectedGovernorate,
@@ -279,7 +279,7 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
   Widget _buildZoneDropdown(int index, ZoneLocationInfo zoneInfo) {
     final selectedGov = zoneInfo.selectedGovernorate;
 
-    return RegistrationSearchDropDown<Zone>(
+    return RegistrationSearchDropDown<ZoneModel.Zone>(
       label: "المنطقة",
       hint: selectedGov == null
           ? "اختر المحافظة أولاً"
@@ -319,7 +319,7 @@ class _DeliveryInfoTabState extends ConsumerState<DeliveryInfoTab> {
           }
 
           // ✅ فلترة بطريقة تشخيصية
-          var filteredZones = <Zone>[];
+          var filteredZones = <ZoneModel.Zone>[];
 
           for (var zone in allZones) {
             if (zone.governorate?.id == null) {

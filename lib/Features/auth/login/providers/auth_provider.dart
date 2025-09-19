@@ -1,9 +1,13 @@
 // lib/Features/auth/login/providers/auth_provider.dart
-import 'package:Tosell/Features/profile/models/zone.dart';
 import 'package:Tosell/Features/auth/Services/auth_service.dart';
 import 'package:Tosell/core/api/client/BaseClient.dart';
 import 'package:Tosell/core/model_core/User.dart';
+import 'package:Tosell/Features/profile/models/zone.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:Tosell/core/utils/helpers/SharedPreferencesHelper.dart';
+import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -24,6 +28,7 @@ class authNotifier extends _$authNotifier {
       return '$imageUrl$imagePath';
     }
   }
+  /// ✅ دالة التسجيل محسنة للأداء
   Future<(User? data, String? error)> register({
     required String fullName,
     required String brandName,
@@ -32,176 +37,191 @@ class authNotifier extends _$authNotifier {
     required String password,
     required String brandImg,
     required List<Zone> zones,
+    String? nearestLandmark,
     double? latitude,
     double? longitude,
-    String? nearestLandmark,
   }) async {
     try {
       state = const AsyncValue.loading();
-      if (fullName.trim().isEmpty) {
-        const errorMsg = 'اسم صاحب المتجر مطلوب';
+
+      // ✅ التحقق من صحة البيانات الأساسية (مبسط)
+      final validationError = _validateRegistrationData(
+        fullName, brandName, userName, phoneNumber, password, brandImg, zones
+      );
+      if (validationError != null) {
         state = const AsyncValue.data(null);
-        print('❌ $errorMsg');
-        return (null, errorMsg);
+        if (kDebugMode) print('❌ AuthProvider: $validationError');
+        return (null, validationError);
       }
 
-      if (brandName.trim().isEmpty) {
-        const errorMsg = 'اسم المتجر مطلوب';
-        state = const AsyncValue.data(null);
-        print('❌ $errorMsg');
-        return (null, errorMsg);
-      }
+      // ✅ معالجة البيانات في isolate منفصل للعمليات الثقيلة
+      final processedData = await compute(_processRegistrationData, {
+        'fullName': fullName.trim(),
+        'brandName': brandName.trim(),
+        'userName': userName.trim(),
+        'phoneNumber': phoneNumber.trim(),
+        'brandImg': brandImg,
+        'zones': zones.map((z) => {
+          'id': z.id,
+          'name': z.name,
+          'type': z.type,
+          'governorate': z.governorate?.name,
+        }).toList(),
+        'nearestLandmark': nearestLandmark,
+        'latitude': latitude,
+        'longitude': longitude,
+      });
 
-      if (userName.trim().isEmpty) {
-        const errorMsg = 'اسم المستخدم مطلوب';
-        state = const AsyncValue.data(null);
-        print('❌ $errorMsg');
-        return (null, errorMsg);
-      }
-
-
-
-      if (password.isEmpty) {
-        const errorMsg = 'كلمة المرور مطلوبة';
-        state = const AsyncValue.data(null);
-        print('❌ $errorMsg');
-        return (null, errorMsg);
-      }
-
-      // ✅ تدقيق وإصلاح رابط الصورة
-      print('🖼️ التحقق من صورة المتجر:');
-      print('   - brandImg الأصلي: "$brandImg"');
-
-      if (brandImg.trim().isEmpty) {
-        const errorMsg = 'صورة المتجر مطلوبة';
-        state = const AsyncValue.data(null);
-        print('❌ $errorMsg');
-        return (null, errorMsg);
-      }
-
-      // ✅ تحويل مسار الصورة إلى URL كامل
-      final fullImageUrl = _buildFullImageUrl(brandImg);
-
-      // ✅ تدقيق المناطق
-      if (zones.isEmpty) {
-        const errorMsg = 'يجب اختيار منطقة واحدة على الأقل';
-        state = const AsyncValue.data(null);
-        return (null, errorMsg);
-      }
-
-      print('   - عدد المناطق: ${zones.length}');
-
-      // ✅ تحويل zones إلى الشكل المطلوب للـ API مع تدقيق
-      final zonesData = <Map<String, dynamic>>[];
-
-      for (int i = 0; i < zones.length; i++) {
-        final zone = zones[i];
-
-        print('   📍 المنطقة ${i + 1}:');
-        print('      - اسم المنطقة: ${zone.name}');
-        print('      - معرف المنطقة: ${zone.id}');
-        print(
-            '      - نوع المنطقة: ${zone.type} (${zone.type == 1 ? 'مركز' : 'أطراف'})');
-        print('      - المحافظة: ${zone.governorate?.name}');
-
-        // ✅ التحقق من صحة معرف المنطقة
-        if (zone.id == null || zone.id! <= 0) {
-          final errorMsg = 'معرف المنطقة ${i + 1} غير صحيح';
-          state = const AsyncValue.data(null);
-          print('❌ $errorMsg');
-          return (null, errorMsg);
-        }
-
-        // ✅ تحضير بيانات المنطقة
-        final zoneData = {
-          'zoneId': zone.id!,
-          'nearestLandmark': nearestLandmark?.trim().isNotEmpty == true
-              ? nearestLandmark!.trim()
-              : 'نقطة مرجعية ${i + 1}',
-          'long': longitude ?? 44.3661,
-          'lat': latitude ?? 33.3152,
-        };
-
-        zonesData.add(zoneData);
-
-        print('      - أقرب نقطة: ${zoneData['nearestLandmark']}');
-        print(
-            '      - الإحداثيات: lat=${zoneData['lat']}, long=${zoneData['long']}');
-      }
-
-      print('✅ تم تحضير ${zonesData.length} منطقة بنجاح');
-
-      // ✅ تحديد نوع المنطقة من أول منطقة مختارة
-      final firstZoneType = zones.first.type ?? 1;
-      print(
-          '🏷️ نوع المنطقة المحدد: $firstZoneType (${firstZoneType == 1 ? 'مركز' : firstZoneType == 2 ? 'أطراف' : 'غير معروف'})');
-
-      // ✅ طباعة ملخص البيانات قبل الإرسال
-      print('📊 ملخص البيانات النهائية:');
-      print('   - الاسم الكامل: "$fullName"');
-      print('   - اسم المتجر: "$brandName"');
-      print('   - اسم المستخدم: "$userName"');
-      print('   - رقم الهاتف: "$phoneNumber"');
-      print('   - صورة المتجر: URL كامل ✅');
-      print('   - عدد المناطق: ${zonesData.length}');
-      print('   - نوع المنطقة: $firstZoneType');
-      print('   - كلمة المرور: محمية ✅');
-
-      // ✅ استدعاء AuthService مع URL الصورة الكامل
-      print('🚀 إرسال البيانات إلى AuthService...');
+      if (kDebugMode) print('🚀 إرسال البيانات إلى AuthService...');
+      
       final (user, error) = await _service.register(
-        fullName: fullName.trim(),
-        brandName: brandName.trim(),
-        userName: userName.trim(),
-        phoneNumber: phoneNumber.trim(),
+        fullName: processedData['fullName'],
+        brandName: processedData['brandName'],
+        userName: processedData['userName'],
+        phoneNumber: processedData['phoneNumber'],
         password: password,
-        brandImg: fullImageUrl, // ✅ استخدام URL الكامل
-        zones: zonesData,
-        type: firstZoneType,
+        brandImg: processedData['fullImageUrl'],
+        zones: processedData['zonesData'],
+        type: processedData['firstZoneType'],
       );
 
       if (user == null) {
         state = const AsyncValue.data(null);
-        print('❌ AuthProvider: فشل التسجيل - $error');
+        if (kDebugMode) print('❌ AuthProvider: فشل التسجيل - $error');
         return (null, error);
       }
 
-      // ✅ حالة مثالية: حفظ بيانات المستخدم محلياً بعد نجاح التسجيل
-      print('✅ AuthProvider: نجح التسجيل كاملاً - ${user.fullName}');
+      // ✅ حفظ بيانات المستخدم محلياً
+      if (kDebugMode) print('✅ AuthProvider: نجح التسجيل - ${user.fullName}');
       await SharedPreferencesHelper.saveUser(user);
       state = AsyncValue.data(user);
 
       return (user, null);
     } catch (e, stackTrace) {
-      print('💥 AuthProvider Exception: $e');
-      print('📍 Stack trace: $stackTrace');
+      if (kDebugMode) {
+        print('💥 AuthProvider Exception: $e');
+        print('📍 Stack trace: $stackTrace');
+      }
       state = AsyncValue.error(e, stackTrace);
       return (null, 'خطأ غير متوقع: ${e.toString()}');
     }
   }
 
-  /// ✅ دالة تسجيل الدخول مع التحقق من حالة التفعيل
+  /// ✅ التحقق من صحة البيانات (مبسط)
+  String? _validateRegistrationData(
+    String fullName, String brandName, String userName, 
+    String phoneNumber, String password, String brandImg, List<Zone> zones
+  ) {
+    if (fullName.trim().isEmpty) return 'اسم صاحب المتجر مطلوب';
+    if (brandName.trim().isEmpty) return 'اسم المتجر مطلوب';
+    if (userName.trim().isEmpty) return 'اسم المستخدم مطلوب';
+    if (phoneNumber.trim().isEmpty) return 'رقم الهاتف مطلوب';
+    if (password.isEmpty) return 'كلمة المرور مطلوبة';
+    if (brandImg.trim().isEmpty) return 'صورة المتجر مطلوبة';
+    if (zones.isEmpty) return 'يجب اختيار منطقة واحدة على الأقل';
+    return null;
+  }
+
+  /// ✅ معالجة بيانات التسجيل في isolate منفصل
+  static Map<String, dynamic> _processRegistrationData(Map<String, dynamic> data) {
+    final fullImageUrl = _buildFullImageUrlStatic(data['brandImg']);
+    
+    final List<Map<String, dynamic>> zonesData = [];
+    final zones = data['zones'] as List;
+    
+    for (int i = 0; i < zones.length; i++) {
+      final zone = zones[i];
+      final zoneData = {
+        'zoneId': zone['id'],
+        'nearestLandmark': data['nearestLandmark']?.toString().trim().isNotEmpty == true
+            ? data['nearestLandmark'].toString().trim()
+            : 'نقطة مرجعية ${i + 1}',
+        'long': data['longitude'] ?? 44.3661,
+        'lat': data['latitude'] ?? 33.3152,
+      };
+      zonesData.add(zoneData);
+    }
+    
+    final firstZoneType = zones.isNotEmpty ? (zones.first['type'] ?? 1) : 1;
+    
+    return {
+      'fullName': data['fullName'],
+      'brandName': data['brandName'],
+      'userName': data['userName'],
+      'phoneNumber': data['phoneNumber'],
+      'fullImageUrl': fullImageUrl,
+      'zonesData': zonesData,
+      'firstZoneType': firstZoneType,
+    };
+  }
+
+  /// ✅ نسخة static من دالة بناء URL الصورة للاستخدام في isolate
+  static String _buildFullImageUrlStatic(String imagePath) {
+    const imageUrl = 'https://api.example.com/images/';
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath;
+    } else if (imagePath.startsWith('/')) {
+      return '$imageUrl${imagePath.substring(1)}';
+    } else {
+      return '$imageUrl$imagePath';
+    }
+  }
+
+  /// ✅ دالة تسجيل الدخول محسنة للأداء
   Future<(User? data, String? error)> login({
-    String? phonNumber,
-    required String passWord,
+    required String phoneNumber,
+    required String password,
   }) async {
     try {
       state = const AsyncValue.loading();
+
+      // ✅ التحقق من صحة البيانات (مبسط)
+      if (phoneNumber.trim().isEmpty) {
+        state = const AsyncValue.data(null);
+        if (kDebugMode) print('❌ AuthProvider: رقم الهاتف فارغ');
+        return (null, 'رقم الهاتف مطلوب');
+      }
+
+      if (password.isEmpty) {
+        state = const AsyncValue.data(null);
+        if (kDebugMode) print('❌ AuthProvider: كلمة المرور فارغة');
+        return (null, 'كلمة المرور مطلوبة');
+      }
+
+      if (kDebugMode) print('🔐 AuthProvider: بدء تسجيل الدخول...');
+
+      // ✅ استدعاء AuthService
       final (user, error) = await _service.login(
-        phoneNumber: phonNumber,
-        password: passWord,
+        phoneNumber: phoneNumber.trim(),
+        password: password,
       );
+
       if (user == null) {
         state = const AsyncValue.data(null);
+        if (kDebugMode) print('❌ AuthProvider: فشل تسجيل الدخول - $error');
         return (null, error);
       }
 
+      // ✅ التحقق من حالة التفعيل
+      if (user.isActive != true) {
+        state = const AsyncValue.data(null);
+        if (kDebugMode) print('⚠️ AuthProvider: الحساب غير مفعل - ${user.fullName}');
+        return (null, 'حسابك غير مفعل. يرجى التواصل مع الإدارة');
+      }
+
+      // ✅ حفظ بيانات المستخدم محلياً
+      if (kDebugMode) print('✅ AuthProvider: نجح تسجيل الدخول - ${user.fullName}');
       await SharedPreferencesHelper.saveUser(user);
       state = AsyncValue.data(user);
-      return (user, error);
+
+      return (user, null);
     } catch (e, stackTrace) {
+      if (kDebugMode) {
+        print('💥 AuthProvider Exception: $e');
+        print('📍 Stack trace: $stackTrace');
+      }
       state = AsyncValue.error(e, stackTrace);
-      return (null, e.toString());
+      return (null, 'خطأ غير متوقع: ${e.toString()}');
     }
   }
 

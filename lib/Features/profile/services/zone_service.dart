@@ -1,18 +1,17 @@
 // lib/Features/profile/services/zone_service.dart
-import 'package:Tosell/Features/profile/models/zone.dart';
+import 'package:Tosell/Features/profile/models/zone.dart' as ZoneModel;
 import 'package:Tosell/core/api/client/BaseClient.dart';
 
 class ZoneService {
-  final BaseClient<Zone> baseClient;
+  final BaseClient<ZoneModel.Zone> baseClient;
 
   ZoneService()
-      : baseClient = BaseClient<Zone>(fromJson: (json) => Zone.fromJson(json));
+      : baseClient = BaseClient<ZoneModel.Zone>(
+            fromJson: (json) => ZoneModel.Zone.fromJson(json));
 
   /// جلب جميع المناطق من الباك اند
-  Future<List<Zone>> getAllZones({
-    Map<String, dynamic>? queryParams, 
-    int page = 1
-  }) async {
+  Future<List<ZoneModel.Zone>> getAllZones(
+      {Map<String, dynamic>? queryParams, int page = 1}) async {
     try {
       var result = await baseClient.getAll(
           endpoint: '/zone', page: page, queryParams: queryParams);
@@ -28,11 +27,8 @@ class ZoneService {
   }
 
   /// جلب المناطق حسب ID المحافظة مع إمكانية البحث
-  Future<List<Zone>> getZonesByGovernorateId({
-    required int governorateId, 
-    String? query, 
-    int page = 1
-  }) async {
+  Future<List<ZoneModel.Zone>> getZonesByGovernorateId(
+      {required int governorateId, String? query, int page = 1}) async {
     try {
       // جلب جميع المناطق أولاً
       var allZones = await getAllZones(page: page);
@@ -57,7 +53,7 @@ class ZoneService {
   }
 
   /// جلب مناطق محددة حسب قائمة من الـ IDs
-  Future<List<Zone>> getZonesByIds(List<int> zoneIds) async {
+  Future<List<ZoneModel.Zone>> getZonesByIds(List<int> zoneIds) async {
     try {
       final allZones = await getAllZones();
       final filteredZones =
@@ -70,7 +66,7 @@ class ZoneService {
   }
 
   /// البحث في المناطق بالاسم
-  Future<List<Zone>> searchZones(String query, {int page = 1}) async {
+  Future<List<ZoneModel.Zone>> searchZones(String query, {int page = 1}) async {
     try {
       if (query.trim().isEmpty) {
         return await getAllZones(page: page);
@@ -89,11 +85,11 @@ class ZoneService {
   }
 
   /// جلب المناطق الخاصة بالتاجر الحالي
-  Future<List<Zone>> getMyZones() async {
+  Future<List<ZoneModel.Zone>> getMyZones() async {
     try {
       // لهذا endpoint نحتاج ZoneObject لأنه يرجع { zone: {...} }
       final zoneObjectClient =
-          BaseClient<ZoneObject>(fromJson: (json) => ZoneObject.fromJson(json));
+          BaseClient<ZoneModel.ZoneObject>(fromJson: (json) => ZoneModel.ZoneObject.fromJson(json));
 
       var result =
           await zoneObjectClient.get(endpoint: '/merchantzones/merchant');

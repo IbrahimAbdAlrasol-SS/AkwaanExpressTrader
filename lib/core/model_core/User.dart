@@ -1,5 +1,5 @@
 // lib/core/model_core/User.dart
-import 'package:Tosell/Features/profile/models/zone.dart';
+import 'package:Tosell/Features/profile/models/zone.dart' as ZoneModel;
 import 'package:Tosell/core/model_core/Role.dart';
  
 class User {
@@ -9,7 +9,7 @@ class User {
   String? phoneNumber;
   String? img;
   Role? role;
-  Zone? zone;
+  ZoneModel.Zone? zone;
   dynamic branch;
   String? type;
   String? id;
@@ -41,7 +41,7 @@ class User {
     userName = json['userName'];
     phoneNumber = json['phoneNumber'];
     role = json['role'] != null ? Role.fromJson(json['role']) : null;
-    zone = json['zone'] != null ? Zone.fromJson(json['zone']) : null;
+    zone = json['zone'] != null ? ZoneModel.Zone.fromJson(json['zone']) : null;
     branch = json['branch'];
     type = json['type'];
     id = json['id'];
