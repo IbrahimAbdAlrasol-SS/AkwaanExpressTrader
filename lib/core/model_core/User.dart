@@ -1,7 +1,7 @@
 // lib/core/model_core/User.dart
 import 'package:Tosell/Features/profile/models/zone.dart' as ZoneModel;
 import 'package:Tosell/core/model_core/Role.dart';
- 
+
 class User {
   String? token;
   String? fullName;

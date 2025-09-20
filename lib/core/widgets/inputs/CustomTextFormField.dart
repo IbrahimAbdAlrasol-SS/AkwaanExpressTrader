@@ -84,7 +84,7 @@ class CustomTextFormField<T> extends StatelessWidget {
                       items: dropdownItems,
                       onChanged: onDropdownChanged,
                       decoration: InputDecoration(
-                        fillColor: Theme.of(context).colorScheme.surface,
+                        fillColor: fillColor ?? Colors.white,
                         filled: true,
                         hintText: hint ?? '',
                         hintStyle: TextStyle(
@@ -137,7 +137,7 @@ class CustomTextFormField<T> extends StatelessWidget {
                       },
                       validator: validator,
                       decoration: InputDecoration(
-                        fillColor: Theme.of(context).colorScheme.surface,
+                        fillColor: fillColor ?? Colors.white,
                         filled: true,
                         hintStyle: TextStyle(
                             color:

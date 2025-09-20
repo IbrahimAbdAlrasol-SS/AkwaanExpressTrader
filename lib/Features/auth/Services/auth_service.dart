@@ -24,8 +24,6 @@ class AuthService {
       return (null, e.toString());
     }
   }
-
-  /// ✅ دالة تسجيل التاجر مع التعامل الصحيح مع الاستجابة
   Future<(User? data, String? error)> register({
     required String fullName,
     required String brandName,
@@ -37,28 +35,11 @@ class AuthService {
     required int type,
   }) async {
     try {
-      print('🚀 AuthService: بدء تسجيل التاجر...');
-      
-      // ✅ تدقيق البيانات الأساسية
-      print('📝 التحقق من البيانات الأساسية:');
-      print('   - fullName: "$fullName" ${fullName.isNotEmpty ? '✅' : '❌ فارغ'}');
-      print('   - brandName: "$brandName" ${brandName.isNotEmpty ? '✅' : '❌ فارغ'}');
-      print('   - userName: "$userName" ${userName.isNotEmpty ? '✅' : '❌ فارغ'}');
-      print('   - phoneNumber: "$phoneNumber" ${phoneNumber.isNotEmpty ? '✅' : '❌ فارغ'}');
-      print('   - password: "${password.isNotEmpty ? '***' : 'فارغ'}" ${password.isNotEmpty ? '✅' : '❌ فارغ'}');
-      
-      // ✅ تدقيق رابط الصورة
-      print('🖼️ التحقق من الصورة:');
-      print('   - brandImg: "$brandImg"');
-      print('   - الطول: ${brandImg.length} حرف');
-      
-      // ✅ التحقق من أنه URL كامل
+    
       final isValidUrl = brandImg.startsWith('https://') || brandImg.startsWith('http://');
       
       if (!isValidUrl) {
-        print('❌ خطأ: brandImg ليس URL كامل');
-        print('   الرابط المستلم: "$brandImg"');
-        print('   المتوقع: رابط يبدأ بـ http:// أو https://');
+      
         return (null, 'صورة المتجر لم يتم معالجتها بشكل صحيح');
       }
       

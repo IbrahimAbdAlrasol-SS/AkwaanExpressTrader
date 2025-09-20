@@ -14,16 +14,9 @@ class _ProvinceOrdersChartState extends State<ProvinceOrdersChart> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> provinces = [
-      'ذي قار',
-      'واسط',
-      'بابل',
-      'موصل',
-      'بصرة',
-      'اربيل',
-      'بغداد'
-    ];
-    final List<int> values = [182, 90, 1203, 390, 194, 267, 6777];
+    // سيتم جلب البيانات من API
+    final List<String> provinces = [];
+    final List<int> values = [];
     final double maxY = values.reduce((a, b) => a > b ? a : b).toDouble() * 1.2;
     final int totalOrders = values.reduce((a, b) => a + b);
 

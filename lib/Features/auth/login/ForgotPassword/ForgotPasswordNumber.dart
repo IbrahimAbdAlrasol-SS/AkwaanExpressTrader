@@ -1,6 +1,5 @@
 import 'package:Tosell/Features/auth/login/providers/auth_provider.dart';
-import 'package:Tosell/Features/auth/register/screens/user_info_tab.dart';
-import 'package:Tosell/Features/auth/register/screens/delivery_info_tab.dart';
+
 import 'package:Tosell/Features/auth/register/widgets/build_background.dart';
 import 'package:Tosell/core/widgets/Others/CustomAppBar.dart';
 import 'package:Tosell/core/widgets/buttons/FillButton.dart';

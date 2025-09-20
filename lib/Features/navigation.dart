@@ -87,6 +87,7 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
       },
     );
   }
+
   BottomNavigationBarItem _buildNavItem(String icon, String label, int index) {
     final bool isSelected = _selectedIndex == index;
     return BottomNavigationBarItem(
@@ -123,6 +124,7 @@ class _NavigationPageState extends ConsumerState<NavigationPage> {
       label: label,
     );
   }
+
   Future<String?> scanBarcode(BuildContext context) async {
     String? res = await SimpleBarcodeScanner.scanBarcode(
       context,

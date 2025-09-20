@@ -197,27 +197,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   List<ReceiptUpdateModel> _getSampleReceipts() {
-    return [
-      ReceiptUpdateModel(
-        deliveryTime: DateTime.now().subtract(const Duration(minutes: 30)),
-        id: '1',
-        code: '#002940',
-        status: 'في المخزن',
-        location: 'بغداد - الكرادة',
-        updatedAt: DateTime.now().subtract(const Duration(minutes: 30)),
-        amount: 10000, // مبلغ الاستحقاق
-      ),
-      ReceiptUpdateModel(
-        deliveryTime: DateTime.now().subtract(const Duration(hours: 2)),
-       //  formattedDateTime: '2023-08-25 10:30:00', // الوقت بصيغة منسقة
-        id: '2',
-        code: '#002941',
-        status: 'قيد الاستحصال',
-        location: 'بغداد - الجادرية',
-        updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
-        amount: 15000, // مبلغ الاستحقاق
-      ),
-    ];
+    // TODO: جلب البيانات من API
+    return [];
   }
 
   List<NotificationModel> _getSampleNotifications() {

@@ -14,7 +14,6 @@ import 'package:Tosell/Features/auth/login/ForgotPassword/ForgotPasswordNumber.d
 import 'package:Tosell/Features/auth/login/ForgotPassword/ForgotPasswordNumberNamePass.dart';
 import 'package:Tosell/Features/auth/login/screens/login_screen.dart';
 
-import 'package:Tosell/Features/auth/register/screens/map_selection_screen.dart';
 import 'package:Tosell/Features/auth/register/screens/register_screen.dart';
 // import 'package:Tosell/Features/navigation.dart';
 import 'package:Tosell/Features/notification/screens/notification_screen.dart';
@@ -69,19 +68,7 @@ final GoRouter appRouter = GoRouter(
     //       const BackgroundWrapper(child: OrderCompleted()),
     // ),
 
-    // ✅ Add route for map
-    GoRoute(
-      path: AppRoutes.mapSelection,
-      builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>?;
-        return BackgroundWrapper(
-          child: MapSelectionScreen(
-            initialLatitude: extra?['latitude'],
-            initialLongitude: extra?['longitude'],
-          ),
-        );
-      },
-    ),
+    // Map selection route removed - file not found
 
     // GoRoute(
     //   path: AppRoutes.order,

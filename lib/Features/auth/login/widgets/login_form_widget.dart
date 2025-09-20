@@ -1,5 +1,6 @@
 import 'package:Tosell/core/config/constants/spaces.dart';
 import 'package:Tosell/core/widgets/inputs/CustomTextFormField.dart';
+import 'package:Tosell/core/widgets/inputs/phone_number_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,9 +46,9 @@ class LoginFormWidget extends StatelessWidget {
           onCountryCodeChanged: onCountryCodeChanged,
           onPhoneNumberChanged: onPhoneNumberChanged,
         ),
-        
+
         const Gap(AppSpaces.medium),
-        
+
         // ✅ Password field section
         _PasswordFieldSection(
           passwordController: passwordController,
@@ -57,9 +58,9 @@ class LoginFormWidget extends StatelessWidget {
           validatePasswordStrength: validatePasswordStrength,
           formatPasswordDisplay: formatPasswordDisplay,
         ),
-        
+
         const Gap(AppSpaces.small),
-        
+
         // ✅ Forgot password link
         const _ForgotPasswordWidget(),
       ],
@@ -67,7 +68,6 @@ class LoginFormWidget extends StatelessWidget {
   }
 }
 
-/// ✅ Widget منفصل لحقل رقم الهاتف
 class _PhoneFieldSection extends StatelessWidget {
   const _PhoneFieldSection({
     required this.phoneController,
@@ -83,18 +83,22 @@ class _PhoneFieldSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const _FieldLabel(text: "رقم الهاتف"),
-        const Gap(8),
-        _PhoneInputField(
-          phoneController: phoneController,
-          phoneFocusNode: phoneFocusNode,
-          onCountryCodeChanged: onCountryCodeChanged,
-          onPhoneNumberChanged: onPhoneNumberChanged,
-        ),
-      ],
+    return PhoneNumberField(
+      label: "رقم الهاتف",
+      controller: phoneController,
+      hint: "07xx xxx xxx",
+      onChanged: (value) {
+        onPhoneNumberChanged(value);
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'يرجى إدخال رقم الهاتف';
+        }
+        if (value.length < 10) {
+          return 'رقم الهاتف يجب أن يكون 10 أرقام على الأقل';
+        }
+        return null;
+      },
     );
   }
 }
@@ -130,7 +134,6 @@ class _PasswordFieldSection extends StatelessWidget {
         hint: '******',
         fillColor: Colors.grey.shade50,
         validator: validatePasswordStrength,
-
         onChanged: (value) {
           // Format password display as *** *** **
           if (obscurePassword && value.isNotEmpty) {
@@ -156,7 +159,7 @@ class _PasswordFieldSection extends StatelessWidget {
 /// ✅ Widget ثابت لتسميات الحقول
 class _FieldLabel extends StatelessWidget {
   const _FieldLabel({required this.text});
-  
+
   final String text;
 
   @override
@@ -190,7 +193,8 @@ class _PhoneInputField extends StatelessWidget {
   final Function(String) onPhoneNumberChanged;
 
   static const _borderRadius = 27.0;
-  static const _contentPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16);
+  static const _contentPadding =
+      EdgeInsets.symmetric(horizontal: 16, vertical: 16);
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +237,6 @@ class _PhoneInputField extends StatelessWidget {
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
           ],
-          
           onChanged: (phone) {
             onCountryCodeChanged(phone.countryCode);
             onPhoneNumberChanged(phone.completeNumber);

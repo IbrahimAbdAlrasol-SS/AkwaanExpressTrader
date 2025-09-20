@@ -17,17 +17,17 @@ part 'auth_provider.g.dart';
 class authNotifier extends _$authNotifier {
   final AuthService _service = AuthService();
 
- 
   String _buildFullImageUrl(String imagePath) {
     if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
       // الرابط كامل بالفعل
       return imagePath;
     } else if (imagePath.startsWith('/')) {
-      return '$imageUrl${imagePath.substring(1)}'; 
+      return '$imageUrl${imagePath.substring(1)}';
     } else {
       return '$imageUrl$imagePath';
     }
   }
+
   /// ✅ دالة التسجيل محسنة للأداء
   Future<(User? data, String? error)> register({
     required String fullName,
@@ -45,9 +45,8 @@ class authNotifier extends _$authNotifier {
       state = const AsyncValue.loading();
 
       // ✅ التحقق من صحة البيانات الأساسية (مبسط)
-      final validationError = _validateRegistrationData(
-        fullName, brandName, userName, phoneNumber, password, brandImg, zones
-      );
+      final validationError = _validateRegistrationData(fullName, brandName,
+          userName, phoneNumber, password, brandImg, zones);
       if (validationError != null) {
         state = const AsyncValue.data(null);
         if (kDebugMode) print('❌ AuthProvider: $validationError');
@@ -61,19 +60,21 @@ class authNotifier extends _$authNotifier {
         'userName': userName.trim(),
         'phoneNumber': phoneNumber.trim(),
         'brandImg': brandImg,
-        'zones': zones.map((z) => {
-          'id': z.id,
-          'name': z.name,
-          'type': z.type,
-          'governorate': z.governorate?.name,
-        }).toList(),
+        'zones': zones
+            .map((z) => {
+                  'id': z.id,
+                  'name': z.name,
+                  'type': z.type,
+                  'governorate': z.governorate?.name,
+                })
+            .toList(),
         'nearestLandmark': nearestLandmark,
         'latitude': latitude,
         'longitude': longitude,
       });
 
       if (kDebugMode) print('🚀 إرسال البيانات إلى AuthService...');
-      
+
       final (user, error) = await _service.register(
         fullName: processedData['fullName'],
         brandName: processedData['brandName'],
@@ -109,9 +110,13 @@ class authNotifier extends _$authNotifier {
 
   /// ✅ التحقق من صحة البيانات (مبسط)
   String? _validateRegistrationData(
-    String fullName, String brandName, String userName, 
-    String phoneNumber, String password, String brandImg, List<Zone> zones
-  ) {
+      String fullName,
+      String brandName,
+      String userName,
+      String phoneNumber,
+      String password,
+      String brandImg,
+      List<Zone> zones) {
     if (fullName.trim().isEmpty) return 'اسم صاحب المتجر مطلوب';
     if (brandName.trim().isEmpty) return 'اسم المتجر مطلوب';
     if (userName.trim().isEmpty) return 'اسم المستخدم مطلوب';
@@ -123,27 +128,29 @@ class authNotifier extends _$authNotifier {
   }
 
   /// ✅ معالجة بيانات التسجيل في isolate منفصل
-  static Map<String, dynamic> _processRegistrationData(Map<String, dynamic> data) {
+  static Map<String, dynamic> _processRegistrationData(
+      Map<String, dynamic> data) {
     final fullImageUrl = _buildFullImageUrlStatic(data['brandImg']);
-    
+
     final List<Map<String, dynamic>> zonesData = [];
     final zones = data['zones'] as List;
-    
+
     for (int i = 0; i < zones.length; i++) {
       final zone = zones[i];
       final zoneData = {
         'zoneId': zone['id'],
-        'nearestLandmark': data['nearestLandmark']?.toString().trim().isNotEmpty == true
-            ? data['nearestLandmark'].toString().trim()
-            : 'نقطة مرجعية ${i + 1}',
+        'nearestLandmark':
+            data['nearestLandmark']?.toString().trim().isNotEmpty == true
+                ? data['nearestLandmark'].toString().trim()
+                : 'نقطة مرجعية ${i + 1}',
         'long': data['longitude'] ?? 44.3661,
         'lat': data['latitude'] ?? 33.3152,
       };
       zonesData.add(zoneData);
     }
-    
+
     final firstZoneType = zones.isNotEmpty ? (zones.first['type'] ?? 1) : 1;
-    
+
     return {
       'fullName': data['fullName'],
       'brandName': data['brandName'],
@@ -205,12 +212,14 @@ class authNotifier extends _$authNotifier {
       // ✅ التحقق من حالة التفعيل
       if (user.isActive != true) {
         state = const AsyncValue.data(null);
-        if (kDebugMode) print('⚠️ AuthProvider: الحساب غير مفعل - ${user.fullName}');
+        if (kDebugMode)
+          print('⚠️ AuthProvider: الحساب غير مفعل - ${user.fullName}');
         return (null, 'حسابك غير مفعل. يرجى التواصل مع الإدارة');
       }
 
       // ✅ حفظ بيانات المستخدم محلياً
-      if (kDebugMode) print('✅ AuthProvider: نجح تسجيل الدخول - ${user.fullName}');
+      if (kDebugMode)
+        print('✅ AuthProvider: نجح تسجيل الدخول - ${user.fullName}');
       await SharedPreferencesHelper.saveUser(user);
       state = AsyncValue.data(user);
 

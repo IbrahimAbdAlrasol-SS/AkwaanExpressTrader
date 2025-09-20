@@ -291,74 +291,72 @@ class RegistrationNotifier extends _$RegistrationNotifier {
 
   // في registration_provider.dart - دالة submitRegistration
 
-  
-Future<bool> submitRegistration() async {
-  if (!validateUserInfo() || !validateZones()) {
-    return false;
-  }
+  Future<bool> submitRegistration() async {
+    if (!validateUserInfo() || !validateZones()) {
+      return false;
+    }
 
-  if (state.uploadedImageUrl == null) {
-    final uploaded = await uploadBrandImage();
-    if (!uploaded) return false;
-  }
+    if (state.uploadedImageUrl == null) {
+      final uploaded = await uploadBrandImage();
+      if (!uploaded) return false;
+    }
 
-  state = state.copyWith(isSubmitting: true, error: null);
+    state = state.copyWith(isSubmitting: true, error: null);
 
-  try {
-    final zonesData = state.zones.map((z) => z.toJson()).toList();
-    final firstZoneType = state.zones.first.selectedZone?.type ?? 1;
+    try {
+      final zonesData = state.zones.map((z) => z.toJson()).toList();
+      final firstZoneType = state.zones.first.selectedZone?.type ?? 1;
 
+      final requestData = {
+        'merchantId': null,
+        'fullName': state.fullName!,
+        'brandName': state.brandName!,
+        'brandImg': state.uploadedImageUrl!,
+        'userName': state.userName!,
+        'phoneNumber': state.phoneNumber!,
+        'img': state.uploadedImageUrl!,
+        'zones': zonesData,
+        'password': state.password!,
+        'type': firstZoneType,
+      };
 
-    final requestData = {
-      'merchantId': null,
-      'fullName': state.fullName!,
-      'brandName': state.brandName!,
-      'brandImg': state.uploadedImageUrl!,
-      'userName': state.userName!,
-      'phoneNumber': state.phoneNumber!,
-      'img': state.uploadedImageUrl!,
-      'zones': zonesData,
-      'password': state.password!,
-      'type': firstZoneType,
-    };
-    
-    print('📤 JSON المرسل كاملاً: $requestData');
+      print('📤 JSON المرسل كاملاً: $requestData');
 
-    final (user, error) = await _authService.register(
-      fullName: state.fullName!,
-      brandName: state.brandName!,
-      userName: state.userName!,
-      phoneNumber: state.phoneNumber!,
-      password: state.password!,
-      brandImg: state.uploadedImageUrl!,
-      zones: zonesData,
-      type: firstZoneType,
-    );
-
-    if (user != null) {
-      print('✅ نجح التسجيل: ${user.fullName}');
-      state = state.copyWith(
-        isSubmitting: false,
-        registeredUser: user,
+      final (user, error) = await _authService.register(
+        fullName: state.fullName!,
+        brandName: state.brandName!,
+        userName: state.userName!,
+        phoneNumber: state.phoneNumber!,
+        password: state.password!,
+        brandImg: state.uploadedImageUrl!,
+        zones: zonesData,
+        type: firstZoneType,
       );
-      return true;
-    } else {
-      print('❌ فشل التسجيل: $error');
+
+      if (user != null) {
+        print('✅ نجح التسجيل: ${user.fullName}');
+        state = state.copyWith(
+          isSubmitting: false,
+          registeredUser: user,
+        );
+        return true;
+      } else {
+        print('❌ فشل التسجيل: $error');
+        state = state.copyWith(
+          error: error ?? 'فشل في التسجيل',
+          isSubmitting: false,
+        );
+        return false;
+      }
+    } catch (e) {
+      print('💥 خطأ استثنائي: $e');
       state = state.copyWith(
-        error: error ?? 'فشل في التسجيل',
+        error: 'خطأ في التسجيل: ${e.toString()}',
         isSubmitting: false,
       );
       return false;
     }
-  } catch (e) {
-    print('💥 خطأ استثنائي: $e');
-    state = state.copyWith(
-      error: 'خطأ في التسجيل: ${e.toString()}',
-      isSubmitting: false,
-    );
-    return false;
   }
-}
 
   void reset() {
     state = const RegistrationState();
@@ -386,4 +384,3 @@ Future<bool> submitRegistration() async {
     state = state.copyWith(zones: newZones);
   }
 }
-
