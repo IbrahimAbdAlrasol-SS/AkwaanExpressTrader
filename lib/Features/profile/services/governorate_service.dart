@@ -30,7 +30,28 @@ class GovernorateService {
         return await getAllZones(page: page);
       }
 
-      final allGovernorates = await getAllZones(page: page);
+      // جلب جميع المحافظات من جميع الصفحات للبحث الصحيح
+      List<ZoneModel.Governorate> allGovernorates = [];
+      int currentPage = 1;
+      bool hasMoreData = true;
+
+      while (hasMoreData) {
+        final pageResult = await getAllZones(page: currentPage);
+
+        if (pageResult.isEmpty) {
+          hasMoreData = false;
+        } else {
+          allGovernorates.addAll(pageResult);
+          currentPage++;
+
+          // إذا كانت النتائج أقل من 10 (حجم الصفحة المعتاد)، فهذا يعني أنها الصفحة الأخيرة
+          if (pageResult.length < 10) {
+            hasMoreData = false;
+          }
+        }
+      }
+
+      // البحث في جميع المحافظات
       final searchResults = allGovernorates
           .where((gov) =>
               gov.name?.toLowerCase().contains(query.toLowerCase()) ?? false)

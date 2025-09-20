@@ -30,8 +30,26 @@ class ZoneService {
   Future<List<ZoneModel.Zone>> getZonesByGovernorateId(
       {required int governorateId, String? query, int page = 1}) async {
     try {
-      // جلب جميع المناطق أولاً
-      var allZones = await getAllZones(page: page);
+      // جلب جميع المناطق من جميع الصفحات
+      List<ZoneModel.Zone> allZones = [];
+      int currentPage = 1;
+      bool hasMoreData = true;
+
+      while (hasMoreData) {
+        final pageResult = await getAllZones(page: currentPage);
+
+        if (pageResult.isEmpty) {
+          hasMoreData = false;
+        } else {
+          allZones.addAll(pageResult);
+          currentPage++;
+
+          // إذا كانت النتائج أقل من 10 (حجم الصفحة المعتاد)، فهذا يعني أنها الصفحة الأخيرة
+          if (pageResult.length < 10) {
+            hasMoreData = false;
+          }
+        }
+      }
 
       // تصفية المناطق حسب المحافظة
       var filteredZones = allZones.where((zone) {
@@ -55,7 +73,27 @@ class ZoneService {
   /// جلب مناطق محددة حسب قائمة من الـ IDs
   Future<List<ZoneModel.Zone>> getZonesByIds(List<int> zoneIds) async {
     try {
-      final allZones = await getAllZones();
+      // جلب جميع المناطق من جميع الصفحات
+      List<ZoneModel.Zone> allZones = [];
+      int currentPage = 1;
+      bool hasMoreData = true;
+
+      while (hasMoreData) {
+        final pageResult = await getAllZones(page: currentPage);
+
+        if (pageResult.isEmpty) {
+          hasMoreData = false;
+        } else {
+          allZones.addAll(pageResult);
+          currentPage++;
+
+          // إذا كانت النتائج أقل من 10 (حجم الصفحة المعتاد)، فهذا يعني أنها الصفحة الأخيرة
+          if (pageResult.length < 10) {
+            hasMoreData = false;
+          }
+        }
+      }
+
       final filteredZones =
           allZones.where((zone) => zoneIds.contains(zone.id)).toList();
 
@@ -72,7 +110,28 @@ class ZoneService {
         return await getAllZones(page: page);
       }
 
-      final allZones = await getAllZones(page: page);
+      // جلب جميع المناطق من جميع الصفحات للبحث الصحيح
+      List<ZoneModel.Zone> allZones = [];
+      int currentPage = 1;
+      bool hasMoreData = true;
+
+      while (hasMoreData) {
+        final pageResult = await getAllZones(page: currentPage);
+
+        if (pageResult.isEmpty) {
+          hasMoreData = false;
+        } else {
+          allZones.addAll(pageResult);
+          currentPage++;
+
+          // إذا كانت النتائج أقل من 10 (حجم الصفحة المعتاد)، فهذا يعني أنها الصفحة الأخيرة
+          if (pageResult.length < 10) {
+            hasMoreData = false;
+          }
+        }
+      }
+
+      // البحث في جميع المناطق
       final searchResults = allZones
           .where((zone) =>
               zone.name?.toLowerCase().contains(query.toLowerCase()) ?? false)

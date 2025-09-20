@@ -61,7 +61,8 @@ class ZoneSearchState {
       isLoading: isLoading ?? this.isLoading,
       error: error,
       query: query ?? this.query,
-      selectedGovernorateId: selectedGovernorateId ?? this.selectedGovernorateId,
+      selectedGovernorateId:
+          selectedGovernorateId ?? this.selectedGovernorateId,
     );
   }
 }
@@ -71,7 +72,8 @@ class GovernorateSearchNotifier extends StateNotifier<GovernorateSearchState> {
   final GovernorateService _governorateService;
   Timer? _debounceTimer;
 
-  GovernorateSearchNotifier(this._governorateService) : super(const GovernorateSearchState()) {
+  GovernorateSearchNotifier(this._governorateService)
+      : super(const GovernorateSearchState()) {
     // تحميل جميع المحافظات عند البداية
     loadAllGovernorates();
   }
@@ -79,7 +81,7 @@ class GovernorateSearchNotifier extends StateNotifier<GovernorateSearchState> {
   /// تحميل جميع المحافظات
   Future<void> loadAllGovernorates() async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final governorates = await _governorateService.getAllZones();
       state = state.copyWith(
@@ -98,10 +100,10 @@ class GovernorateSearchNotifier extends StateNotifier<GovernorateSearchState> {
   void searchGovernorates(String query) {
     // إلغاء المؤقت السابق
     _debounceTimer?.cancel();
-    
+
     // تحديث الاستعلام فوراً
     state = state.copyWith(query: query);
-    
+
     // إنشاء مؤقت جديد
     _debounceTimer = Timer(const Duration(milliseconds: 300), () {
       _performSearch(query);
@@ -111,7 +113,7 @@ class GovernorateSearchNotifier extends StateNotifier<GovernorateSearchState> {
   /// تنفيذ البحث الفعلي
   Future<void> _performSearch(String query) async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final governorates = await _governorateService.searchGovernorates(query);
       state = state.copyWith(
@@ -148,7 +150,7 @@ class ZoneSearchNotifier extends StateNotifier<ZoneSearchState> {
       error: null,
       query: '',
     );
-    
+
     try {
       final zones = await _zoneService.getZonesByGovernorateId(
         governorateId: governorateId,
@@ -169,10 +171,10 @@ class ZoneSearchNotifier extends StateNotifier<ZoneSearchState> {
   void searchZones(String query) {
     // إلغاء المؤقت السابق
     _debounceTimer?.cancel();
-    
+
     // تحديث الاستعلام فوراً
     state = state.copyWith(query: query);
-    
+
     // إنشاء مؤقت جديد
     _debounceTimer = Timer(const Duration(milliseconds: 300), () {
       _performZoneSearch(query);
@@ -182,9 +184,9 @@ class ZoneSearchNotifier extends StateNotifier<ZoneSearchState> {
   /// تنفيذ البحث الفعلي في المناطق
   Future<void> _performZoneSearch(String query) async {
     if (state.selectedGovernorateId == null) return;
-    
+
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final zones = await _zoneService.getZonesByGovernorateId(
         governorateId: state.selectedGovernorateId!,
@@ -227,12 +229,15 @@ final zoneServiceProvider = Provider<ZoneService>((ref) {
 });
 
 /// Providers للبحث
-final governorateSearchProvider = StateNotifierProvider<GovernorateSearchNotifier, GovernorateSearchState>((ref) {
+final governorateSearchProvider =
+    StateNotifierProvider<GovernorateSearchNotifier, GovernorateSearchState>(
+        (ref) {
   final service = ref.watch(governorateServiceProvider);
   return GovernorateSearchNotifier(service);
 });
 
-final zoneSearchProvider = StateNotifierProvider<ZoneSearchNotifier, ZoneSearchState>((ref) {
+final zoneSearchProvider =
+    StateNotifierProvider<ZoneSearchNotifier, ZoneSearchState>((ref) {
   final service = ref.watch(zoneServiceProvider);
   return ZoneSearchNotifier(service);
 });

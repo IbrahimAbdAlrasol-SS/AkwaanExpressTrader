@@ -21,9 +21,9 @@ class _RegisterTabsWidgetState extends State<RegisterTabsWidget> {
       children: [
         // شريط التابات
         _buildTabBar(),
-        
+
         const Gap(AppSpaces.large),
-        
+
         // محتوى التاب المحدد
         _buildTabContent(),
       ],
@@ -43,9 +43,9 @@ class _RegisterTabsWidgetState extends State<RegisterTabsWidget> {
             color: _getTabColor(0),
           ),
         ),
-        
+
         const Gap(AppSpaces.medium),
-        
+
         // تاب معلومات الاستلام
         Expanded(
           child: _buildTab(
@@ -83,16 +83,16 @@ class _RegisterTabsWidgetState extends State<RegisterTabsWidget> {
               borderRadius: BorderRadius.circular(AppSpaces.large),
             ),
           ),
-          
+
           const Gap(AppSpaces.small),
-          
+
           // اسم التاب
           Text(
             title,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: isActive ? color : Colors.grey[600],
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-            ),
+                  color: isActive ? color : Colors.grey[600],
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                ),
             textAlign: TextAlign.center,
           ),
         ],

@@ -108,13 +108,11 @@ class _LocationDisplayWidgetState extends ConsumerState<LocationDisplayWidget> {
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       // نظام البحث عن المحافظة والمنطقة
-     
 
       // قسم الخريطة
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         // عنوان قسم الخريطة
-       
-      
+
         // زر التعديل
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,9 +131,9 @@ class _LocationDisplayWidgetState extends ConsumerState<LocationDisplayWidget> {
             ),
           ],
         ),
-      
+
         const Gap(12),
-      
+
         // عرض الخريطة
         Container(
           height: _showInteractiveMap ? 400 : 200,
@@ -215,7 +213,7 @@ class _LocationDisplayWidgetState extends ConsumerState<LocationDisplayWidget> {
                             ),
                           ),
                         ),
-      
+
                       // طبقة شفافة للنقر (فقط في وضع المعاينة)
                       if (!_showInteractiveMap)
                         Positioned.fill(
@@ -228,7 +226,7 @@ class _LocationDisplayWidgetState extends ConsumerState<LocationDisplayWidget> {
                             ),
                           ),
                         ),
-      
+
                       // زر الموقع الحالي (فقط في وضع المعاينة)
                       if (!_showInteractiveMap)
                         Positioned(
@@ -262,7 +260,7 @@ class _LocationDisplayWidgetState extends ConsumerState<LocationDisplayWidget> {
                             ),
                           ),
                         ),
-      
+
                       // مؤشر الموقع في الزاوية (فقط في وضع المعاينة)
                       if (_selectedLocation != null && !_showInteractiveMap)
                         Positioned(

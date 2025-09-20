@@ -38,11 +38,13 @@ class _AddressFormWidgetState extends State<AddressFormWidget> {
     try {
       final governorates = await _governorateService.searchGovernorates(query);
       // تحويل Governorate إلى Zone
-      return governorates.map((gov) => Zone(
-        id: gov.id,
-        name: gov.name,
-        governorate: gov, // استخدام الـ governorate نفسه
-      )).toList();
+      return governorates
+          .map((gov) => Zone(
+                id: gov.id,
+                name: gov.name,
+                governorate: gov, // استخدام الـ governorate نفسه
+              ))
+          .toList();
     } catch (e) {
       print('خطأ في جلب المحافظات: $e');
       return [];
